@@ -9,5 +9,6 @@
 ## Techs
 - ReactJs
 - Google APIs (Sign in / Books)
+- Firebase
 - UML
 - MVVM
