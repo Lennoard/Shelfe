@@ -14,6 +14,10 @@
 - Favoritar
 - Compartilhar
 
+Figma:
+https://www.figma.com/file/e2HCfoiHR6Nh7Rgb8OpzyN/Shelfe
+
+
 ## Techs
 - ReactJs
 - Google APIs (Sign in / Books)
