@@ -1,0 +1,19 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  color: rgba(0, 0, 0, .87);
+  background-color: #FAFAFA;
+}
+
+body, input, button, textarea {
+  font-family: 'Raleway', sans-serif!important;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Righteous', cursive!important;
+}
+
