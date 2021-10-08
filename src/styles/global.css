@@ -9,7 +9,7 @@ body {
   background-color: #FAFAFA;
 }
 
-body, input, button, textarea {
+body, input, button, textarea, p, a, span, i, b, strong {
   font-family: 'Raleway', sans-serif!important;
 }
 
