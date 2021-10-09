@@ -1,7 +1,6 @@
-import React from 'react';
 import './styles/global.css';
 import Routes from "./routes";
-import { createTheme, ThemeProvider } from '@material-ui/core';
+import { createTheme, ThemeProvider } from "@mui/material";
 
 const theme = createTheme({
   palette: {
