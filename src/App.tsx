@@ -1,6 +1,10 @@
 import './styles/global.css';
+import { useState } from "react";
 import Routes from "./routes";
 import { createTheme, ThemeProvider } from "@mui/material";
+import SignIn from './pages/SignIn';
+import initFirebase from './firebase';
+import { getAuth } from "firebase/auth";
 
 const theme = createTheme({
   palette: {
@@ -12,7 +16,15 @@ const theme = createTheme({
   },
 });
 
+initFirebase();
+const auth = getAuth();
+
 function App() {
+
+  if (!auth.currentUser) {
+    return <SignIn />;
+  }
+
   return (
     <ThemeProvider theme={theme}>
       <Routes />
