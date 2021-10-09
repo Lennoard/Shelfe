@@ -5,7 +5,7 @@ import Grid from "@mui/material/Grid";
 import React, { useState } from "react";
 import PropTypes from "prop-types";
 import GoogleSignInButton from "../components/GoogleSignInButton";
-import showLocalizedAuthError from "./auth/AuthErrors";
+import showLocalizedAuthError from "../utils/auth/AuthErrors";
 
 import bookLogo from "../images/pages/signin/book.svg";
 
