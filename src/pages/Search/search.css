@@ -1,0 +1,40 @@
+#imagery,
+#empty-state-image {
+  max-width: 320px;
+  margin-top: 32px;
+  transition: 250ms;
+}
+
+#input-card {
+  width: 50%;
+  transition: 250ms;
+}
+
+@media only screen and (max-width: 900px) {
+  #input-card {
+    width: 90%;
+  }
+  #empty-state-image {
+    max-width: 240px;
+  }
+}
+
+@media only screen and (max-width: 600px) {
+  #input-card {
+    width: 80%;
+  }
+  #empty-state-image {
+    max-width: 200px;
+  }
+}
+
+@media only screen and (max-width: 480px) {
+  #imagery,
+  #empty-state-image {
+    max-width: 170px;
+  }
+
+  #input-card {
+    width: 90%;
+  }
+}
