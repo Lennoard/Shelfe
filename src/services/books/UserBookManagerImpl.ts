@@ -4,9 +4,6 @@ import IUserBook from "../../data/models/book/IUserBook";
 import IUserBookManager from "./IUserBookManager";
 
 import { doc, getDoc, getDocs, collection, query } from "firebase/firestore";
-import initFirebase from "../../firebase";
-
-initFirebase();
 
 export default class UserBookManagerImpl implements IUserBookManager {
   auth: Auth;

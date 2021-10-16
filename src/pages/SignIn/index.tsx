@@ -13,13 +13,13 @@ import LoadingButton from "@mui/lab/LoadingButton";
 import Grid from "@mui/material/Grid";
 import React, { useState } from "react";
 import GoogleSignInButton from "../../components/GoogleSignInButton";
-import showLocalizedAuthError from "../auth/AuthErrors";
-import { useHistory } from "react-router-dom";
 
 import bookLogo from "../../images/pages/signin/book.svg";
 
 import "./signin.css";
 import initFirebase from "../../firebase";
+import { history } from "../../routes";
+import showLocalizedAuthError from "../../utils/auth/AuthErrors";
 
 initFirebase();
 const auth = getAuth();
@@ -35,7 +35,6 @@ export interface IToast {
 }
 
 export default function SignIn() {
-  const history = useHistory();
   const [credentials, setCredentials] = useState<IAuthCredential>({
     email: "",
     password: "",
