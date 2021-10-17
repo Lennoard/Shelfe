@@ -14,8 +14,11 @@ interface BooksApiResponse {
 
 const mapper = new BookItemMapper();
 
-export default class BooksApiMAnager {
-  async search(query: string, startIndex: number = 0) {
+export default class BooksApiManager {
+  async search(
+    query: string,
+    startIndex: number = 0
+  ): Promise<[number, Array<IBook>]> {
     const result = await booksApi.get<BooksApiResponse>("volumes", {
       params: {
         q: encodeURIComponent(query),
@@ -24,7 +27,10 @@ export default class BooksApiMAnager {
       },
     });
 
-    return result.data.items.map(item => mapper.map(item));
+    return [
+      result.data.totalItems,
+      result.data.items.map((item) => mapper.map(item)),
+    ];
   }
 
   async getBook(bookId: string): Promise<IBook> {

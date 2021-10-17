@@ -18,11 +18,11 @@ export default class BookItemMapper implements IMapper<IBook> {
         ? volumeInfo.description
         : "Nenhuma descrição encontrada",
       isbn: industryIdentifiers ? industryIdentifiers[0].identifier : null,
-      pageCount: volumeInfo.pageCount,
+      pageCount: volumeInfo.pageCount ? volumeInfo.pageCount : 0,
       averageRating: volumeInfo.averageRating ? volumeInfo.averageRating : 0,
       ratingCount: volumeInfo.ratingsCount ? volumeInfo.ratingsCount : 0,
       language: volumeInfo.language,
-      authors: volumeInfo.authors,
+      authors: volumeInfo.authors ? volumeInfo.authors : "Nenhum autor encontrado",
       imageUrls: imageLinks ? [
         imageLinks?.thumbnail,
         imageLinks?.smallThumbnail,

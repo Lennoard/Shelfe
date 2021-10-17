@@ -1,0 +1,35 @@
+.bookCardImage {
+  width: 128px;
+  height: 192px;
+}
+
+.bookCardContainer {
+  margin-left: 16px;
+  margin-right: 16px;
+  width: 100%;
+}
+
+.bookCardContainer .title {
+  font-family: 'Nunito', sans-serif!important;
+  font-weight: 700;
+  max-width: 392px;
+  transition: 250ms;
+}
+
+@media only screen and (max-width: 1200px) {
+  .bookCardContainer .title {
+    max-width: 220px;
+  }
+}
+
+@media only screen and (max-width: 900px) {
+  .bookCardContainer .title {
+    max-width: 120px;
+  }
+}
+
+@media only screen and (max-width: 600px) {
+  .bookCardContainer .title {
+    max-width: inherit;
+  }
+}
