@@ -20,10 +20,6 @@ const auth = getAuth();
 
 function App() {
 
-  if (!auth.currentUser) {
-    return <SignIn />;
-  }
-
   return (
     <ThemeProvider theme={theme}>
       <Routes />
