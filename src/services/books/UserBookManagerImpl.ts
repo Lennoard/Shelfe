@@ -1,5 +1,5 @@
 import { Auth } from "@firebase/auth";
-import { Firestore, QueryDocumentSnapshot, setDoc, UpdateData } from "@firebase/firestore";
+import { deleteDoc, Firestore, QueryDocumentSnapshot, setDoc, UpdateData } from "@firebase/firestore";
 import IUserBook from "../../data/models/book/IUserBook";
 import IUserBookManager from "./IUserBookManager";
 
@@ -56,7 +56,7 @@ export default class UserBookManagerImpl implements IUserBookManager {
   async setUserBook(userBook: IUserBook) {
     const docRef = doc(
       this.firestore,
-      `users/${this.uid}/books`,
+      `users/${this.uid()}/books`,
       userBook.id
     ).withConverter(getUserBookConverter());
 
@@ -64,8 +64,18 @@ export default class UserBookManagerImpl implements IUserBookManager {
   }
 
   async updateUserBook(bookId: string, data: UpdateData<IUserBook>) {
-    const docRef = doc(this.firestore, `users/${this.uid}/books`, bookId);
+    const docRef = doc(this.firestore, `users/${this.uid()}/books`, bookId);
     return await updateDoc(docRef, data);
+  }
+
+  async deleteUserBook(userBook: IUserBook) {
+    const docRef = doc(
+      this.firestore,
+      `users/${this.uid()}/books`,
+      userBook.id
+    ).withConverter(getUserBookConverter());
+
+    return await deleteDoc(docRef);
   }
 
   uid() {
@@ -76,6 +86,20 @@ export default class UserBookManagerImpl implements IUserBookManager {
 function getUserBookConverter() {
   return {
     toFirestore: (data: IUserBook) => data,
-    fromFirestore: (snap: QueryDocumentSnapshot) => snap.data() as IUserBook
+    fromFirestore: (snap: QueryDocumentSnapshot) => {
+      let base = snap.data() as IUserBook;
+
+      base.publishedAt = snap.data().publishedAt
+        ? snap.data().publishedAt.toDate()
+        : new Date();
+      base.lastModified = snap.data().lastModified
+        ? snap.data().lastModified.toDate()
+        : new Date();
+      base.lastStatus = snap.data().lastStatus
+        ? snap.data().lastStatus.toDate()
+        : new Date();
+
+      return base
+    }
   }
 }

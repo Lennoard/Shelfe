@@ -1,0 +1,31 @@
+import { Button } from "@mui/material";
+
+export default function BrandButton(props: BrandButtonProps) {
+  return (
+    <Button
+      onClick={props.onClick}
+      endIcon={props.endIcon}
+      variant="contained"
+      disableElevation
+      sx={{
+        borderRadius: "24px",
+        textTransform: "none",
+        fontWeight: "600",
+        backgroundColor: props.backgroundColor
+          ? props.backgroundColor
+          : "#8CF9DC",
+        color: props.textColor ? props.textColor : "#000000",
+      }}
+    >
+      {props.text}
+    </Button>
+  );
+}
+
+export interface BrandButtonProps {
+  text: string;
+  backgroundColor?: string;
+  textColor?: string;
+  endIcon?: React.ReactNode;
+  onClick?: React.MouseEventHandler<HTMLButtonElement>;
+}

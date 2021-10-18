@@ -21,6 +21,7 @@ export default class UserBookMapper {
       userRating: 0,
       progress: 0,
       status: BookStatus.NotAdded,
+      lastStatus: new Date(),
       favorite: false,
       lastModified: new Date(),
       notes: null

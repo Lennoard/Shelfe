@@ -6,5 +6,9 @@ export default interface IUserBookManager extends IFirestoreManager {
   getUserBooks: () => Promise<Array<IUserBook>>;
   getUserBook: (bookId: string) => Promise<IUserBook | null>;
   setUserBook: (userBook: IUserBook) => Promise<void>;
-  updateUserBook: (bookId: string, data: UpdateData<IUserBook>) => Promise<void>;
+  updateUserBook: (
+    bookId: string,
+    data: UpdateData<IUserBook>
+  ) => Promise<void>;
+  deleteUserBook: (userBook: IUserBook) => Promise<void>;
 }

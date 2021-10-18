@@ -18,7 +18,7 @@ export default class BookItemMapper implements IMapper<IBook> {
         ? volumeInfo.description
         : "Nenhuma descrição encontrada",
       isbn: industryIdentifiers ? industryIdentifiers[0].identifier : null,
-      pageCount: volumeInfo.pageCount ? volumeInfo.pageCount : 0,
+      pageCount: volumeInfo.pageCount ? volumeInfo.pageCount : 1,
       averageRating: volumeInfo.averageRating ? volumeInfo.averageRating : 0,
       ratingCount: volumeInfo.ratingsCount ? volumeInfo.ratingsCount : 0,
       language: volumeInfo.language,
@@ -28,6 +28,7 @@ export default class BookItemMapper implements IMapper<IBook> {
         imageLinks?.smallThumbnail,
       ] : [],
       categories: volumeInfo.categories ? volumeInfo.categories : [],
+      infoLink: volumeInfo.infoLink ? volumeInfo.infoLink : "https://books.google.com",
     } as IBook;
   }
   

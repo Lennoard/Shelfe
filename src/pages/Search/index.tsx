@@ -105,11 +105,13 @@ export default function Search(props: Props) {
     setTitle(`${totalItems} resultados para "${searchQuery}"`);
 
     return (
-      <Grid container spacing={4} rowSpacing={3}>
+      <Grid container spacing={4} rowSpacing={3} sx={{ marginTop: "36px" }}>
         {searchResults.flatMap((book) => {
           return (
             <Grid item xs={12} sm={6}>
-              <BookCard book={new UserBookMapper().map(book)} />
+              <BookCard book={new UserBookMapper().map(book)} onClick={() => {
+                history.push(`/book?id=${book.id}`)
+              }} />
             </Grid>
           );
         })}
@@ -131,7 +133,7 @@ export default function Search(props: Props) {
       <HideOnScroll {...props}>
         <AppBar position="fixed" color="transparent" elevation={0}>
           <Toolbar>
-            <Typography marginTop="24px" variant="h4">
+            <Typography marginTop="32px" variant="h4">
               {title}
             </Typography>
           </Toolbar>

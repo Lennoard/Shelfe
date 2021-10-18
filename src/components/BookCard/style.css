@@ -7,11 +7,13 @@
   margin-left: 16px;
   margin-right: 16px;
   width: 100%;
+  text-align: start;
 }
 
 .bookCardContainer .title {
   font-family: 'Nunito', sans-serif!important;
   font-weight: 700;
+  margin-top: 0;
   max-width: 392px;
   transition: 250ms;
 }
