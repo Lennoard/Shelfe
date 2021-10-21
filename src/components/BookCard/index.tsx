@@ -55,7 +55,7 @@ export default function BookCard(props: BookCardProps) {
             }}
           >
             <Star fontSize="small" color="disabled" />
-            <Typography variant="body2">{book.userRating}</Typography>
+            <Typography variant="body2" mt={0.3} >{book.userRating}</Typography>
           </Box>
         </div>
       </ButtonBase>

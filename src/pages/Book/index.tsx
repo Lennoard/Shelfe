@@ -16,6 +16,7 @@ import {
   Tooltip,
   Modal,
   Input,
+  Rating,
 } from "@mui/material";
 
 import BooksApiManager from "../../services/BooksApiManager";
@@ -295,13 +296,13 @@ export default function Book() {
               if (!isNaN(manualProgress) && manualProgress <= book.pageCount) {
                 book.progress = manualProgress;
                 updateBook({ progress: book.progress });
-              } 
+              }
             }
           }}
           onChange={(event) => {
             let newProgress = parseInt(event.target.value);
             if (!isNaN(newProgress) && newProgress <= book.pageCount) {
-              setManualProgress(newProgress)
+              setManualProgress(newProgress);
             }
           }}
           autoFocus
@@ -341,6 +342,26 @@ export default function Book() {
           />
         </Box>
 
+        <Divider sx={{ marginTop: "16px", marginBottom: "16px" }} />
+
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            padding: "8px 16px",
+          }}
+        >
+          <Typography flexGrow={1} component="legend">Nota</Typography>
+          <Rating
+            name="rating"
+            defaultValue={book.userRating ? book.userRating : 0}
+            max={10}
+            onChange={(_, value) => {
+              book.userRating = value;
+              updateBook({ userRating: book.userRating });
+            }}
+          />
+        </Box>
         <Divider sx={{ marginTop: "16px", marginBottom: "16px" }} />
 
         <Box
