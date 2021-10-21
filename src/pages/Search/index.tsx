@@ -3,10 +3,8 @@ import { Fragment, useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import {
   Container,
-  AppBar,
   Grid,
   Box,
-  Toolbar,
   Typography,
   TextField,
   Card,
@@ -17,19 +15,23 @@ import {
 
 import "./search.css";
 import BooksApiManager from "../../services/BooksApiManager";
-import IBook from "../../data/models/book/IBook";
+import IUserBook from "../../data/models/book/IUserBook";
 import searchIllustration from "./images/imagery_search.png";
 import noResults from "./images/no-results.svg";
 import BookCard from "../../components/BookCard";
 import UserBookMapper from "../../data/mappers/UserBookMapper";
-import { getAuth } from "@firebase/auth";
 import ShelfeDrawer from "../../components/ShelfeDrawer";
+import UserBookManagerImpl from "../../services/books/UserBookManagerImpl";
+import { getAuth } from "@firebase/auth";
+import { getFirestore } from "@firebase/firestore";
 
 const api = new BooksApiManager();
+const userBookManager = new UserBookManagerImpl(getAuth(), getFirestore());
+const userBookMapper = new UserBookMapper();
 
 export default function Search() {
   const history = useHistory();
-  const [searchResults, setSearchResults] = useState<Array<IBook>>([]);
+  const [searchResults, setSearchResults] = useState<Array<IUserBook>>([]);
   const [totalItems, setTotalItems] = useState(0);
   const [title, setTitle] = useState("Pesquisar");
   const [showEmptyState, setShowEmptyState] = useState(false);
@@ -48,11 +50,30 @@ export default function Search() {
         api
           .search(query)
           .then(([itemsFound, books]) => {
-            setSearching(false);
-            setTotalItems(itemsFound);
-            setSearchResults(books);
+            userBookManager
+              .getUserBooks()
+              .then(userBooks => {
+                setSearching(false);
+                setTotalItems(itemsFound);
+
+                let results = books.map((book) => {
+                  let userBook = userBooks.find((b) => b.id === book.id);
+                  console.warn(userBook);
+                  if (userBook) return userBook;
+                  return userBookMapper.map(book);
+                });
+
+                setSearchResults(results);
+              }).catch(error => {
+                setSearching(false);
+                setTotalItems(itemsFound);
+
+                console.warn(error);
+                setSearchResults(books.map(b => userBookMapper.map(b)));
+              });
           })
-          .catch(() => {
+          .catch((error) => {
+            console.warn(error)
             setSearching(false);
             setShowEmptyState(true)
           });
@@ -66,7 +87,7 @@ export default function Search() {
         }
 
         performSearch(
-          decodeURIComponent((location.search as string).replace("?q", ""))
+          decodeURIComponent((location.search as string).replace("?q=", ""))
         );
       });
 
@@ -75,7 +96,6 @@ export default function Search() {
         
       performSearch(decodeURIComponent(query));
       setSearchQuery(query);
-
     });
   }, [history])
 
@@ -83,10 +103,8 @@ export default function Search() {
     return (
       <ShelfeDrawer title={title} selectedIndex={1}>
         <Box
+          className="flex-center"
           style={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
             flexDirection: "column",
             height: "100vh",
           }}
@@ -106,11 +124,11 @@ export default function Search() {
     return (
       <Grid item xs={12}>
         <Box
+          className="flex-center"
           sx={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
             flexDirection: "column",
+            height: "100vh",
+            marginTop: "-160px"
           }}
         >
           <img id="imagery" src={searchIllustration} alt="Pesquisar" />
@@ -149,7 +167,7 @@ export default function Search() {
         {searchResults.flatMap((book) => {
           return (
             <Grid item xs={12} sm={6}>
-              <BookCard book={new UserBookMapper().map(book)} onClick={() => {
+              <BookCard book={book} onClick={() => {
                 history.push(`/book?id=${book.id}`)
               }} />
             </Grid>
@@ -189,11 +207,10 @@ interface EmptyStateProps {
 function EmptyState(props: EmptyStateProps) {
   return (
     <Box
+      className="flex-center"
       sx={{
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
         flexDirection: "column",
+        marginTop: "-160px"
       }}
     >
       <img id="empty-state-image" src={noResults} alt="Nenhum resultado encontrado" />

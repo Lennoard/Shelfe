@@ -14,8 +14,17 @@ export default function BookCard(props: BookCardProps) {
   const imageUrl = book.imageUrls.length === 0
     ? "https://via.placeholder.com/128x192?text=SEM+IMAGEM"
     : book.imageUrls[0];
+  const MIN = 0;
+  const maxProgress = book ? book.pageCount : 0;
+  const progress = book ? book.progress : 0;
+  const normaliseProgress = () =>
+    ((progress - MIN) * 100) / (maxProgress - MIN);
+  
   return (
-    <Card onClick={props.onClick} sx={{ display: "flex", borderRadius: "12px" }}>
+    <Card
+      onClick={props.onClick}
+      sx={{ display: "flex", borderRadius: "12px" }}
+    >
       <ButtonBase sx={{ width: "100%" }}>
         <img className="bookCardImage" src={imageUrl} alt="Capa" />
         <div className="bookCardContainer">
@@ -33,7 +42,7 @@ export default function BookCard(props: BookCardProps) {
             <LinearProgress
               variant="determinate"
               color="secondary"
-              value={book.progress}
+              value={normaliseProgress()}
               sx={{ borderRadius: "16px", height: "8px" }}
             />
           </Box>

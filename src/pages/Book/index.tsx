@@ -118,6 +118,10 @@ export default function Book() {
   }
 
   const RightGrid = () => {
+    const imageUrl =
+      book == null || book.imageUrls.length === 0
+        ? "https://via.placeholder.com/128x192?text=SEM+IMAGEM"
+        : book!!.imageUrls[0];
     return (
       <Grid
         item
@@ -135,7 +139,7 @@ export default function Book() {
                 margin: "16px",
               }}
             >
-              <img src={book.imageUrls[0]} alt="Capa" height="100%" width="100%" />
+              <img src={imageUrl} alt="Capa" height="100%" width="100%" />
             </Card>
           ) : (
             <Skeleton width={128} height={280} />

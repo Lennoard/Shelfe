@@ -20,7 +20,7 @@ import { getAuth, User } from "@firebase/auth";
 
 import "./style.css";
 
-const drawerWidth = 280;
+const drawerWidth = 320;
 
 const defaultItems = [
   {
@@ -47,7 +47,6 @@ export default function ShelfeDrawer(props: DrawerProps) {
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
   };
-
 
   useEffect(() => {
     getAuth().onAuthStateChanged(user => setUser(user));
@@ -87,8 +86,8 @@ export default function ShelfeDrawer(props: DrawerProps) {
           position="fixed"
           elevation={0}
           sx={{
-            width: { sm: `calc(100% - ${drawerWidth}px)` },
-            ml: { sm: `${drawerWidth}px` },
+            width: { lg: `calc(100% - ${drawerWidth}px)` },
+            ml: { lg: `${drawerWidth}px` },
           }}
         >
           <Toolbar>
@@ -97,7 +96,7 @@ export default function ShelfeDrawer(props: DrawerProps) {
               aria-label="open drawer"
               edge="start"
               onClick={handleDrawerToggle}
-              sx={{ mr: 2, mt: 4, display: { sm: "none" } }}
+              sx={{ mr: 2, mt: 4, display: { lg: "none" } }}
             >
               <MenuIcon />
             </IconButton>
@@ -109,7 +108,7 @@ export default function ShelfeDrawer(props: DrawerProps) {
       </HideOnScroll>
       <Box
         component="nav"
-        sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}
+        sx={{ width: { lg: drawerWidth }, flexShrink: { sm: 0 } }}
         aria-label="mailbox folders"
       >
         <Drawer
@@ -121,7 +120,7 @@ export default function ShelfeDrawer(props: DrawerProps) {
             keepMounted: true,
           }}
           sx={{
-            display: { xs: "block", sm: "none" },
+            display: { xs: "block", sm: "block", md: "block", lg: "none" },
             "& .MuiDrawer-paper": {
               boxSizing: "border-box",
               backgroundColor: "#2F9FA1",
@@ -135,7 +134,7 @@ export default function ShelfeDrawer(props: DrawerProps) {
         <Drawer
           variant="permanent"
           sx={{
-            display: { xs: "none", sm: "block" },
+            display: { xs: "none", sm: "none", md: "none", lg: "block" },
             "& .MuiDrawer-paper": {
               boxSizing: "border-box",
               backgroundColor: "#2F9FA1",
