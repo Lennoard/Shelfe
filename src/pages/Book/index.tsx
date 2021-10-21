@@ -15,6 +15,7 @@ import {
   IconButton,
   Tooltip,
   Modal,
+  Input,
 } from "@mui/material";
 
 import BooksApiManager from "../../services/BooksApiManager";
@@ -31,11 +32,13 @@ import {
   DeleteOutlineOutlined,
   FavoriteBorderOutlined,
   KeyboardArrowDown,
+  ModeEditOutlined,
   RemoveCircleOutline,
   Share
 } from "@mui/icons-material";
 import BrandButtonSelect from "../../components/BrandButtonSelect";
 import UserBookMapper from "../../data/mappers/UserBookMapper";
+import ShelfeDrawer from "../../components/ShelfeDrawer";
 
 const api = new BooksApiManager();
 const userBookManager = new UserBookManagerImpl(getAuth(), getFirestore());
@@ -45,50 +48,72 @@ export default function Book() {
   const [showEmptyState, setShowEmptyState] = useState(false);
   const [book, setBook] = useState<IUserBook | null>(null);
   const [openModal, setModalOpen] = useState(false);
+  const [showEditProgress, setShowEditProgress] = useState(false);
+  const [manualProgress, setManualProgress] = useState(0);
   const handleCloseModal = () => setModalOpen(false);
 
   useEffect(() => {
-    const bookId = new URLSearchParams(window.location.search).get("id");
-    if (!bookId) {
-      setShowEmptyState(true);
-      return;
-    }
-
-    const queryApi = () => {
-      api
-        .getBook(bookId)
-        .then((book) => setBook(new UserBookMapper().map(book)))
-        .catch(error => {
-          console.log(error);
+    getAuth().onAuthStateChanged(user => {
+      if (user) {
+        const bookId = new URLSearchParams(window.location.search).get("id");
+        if (!bookId) {
           setShowEmptyState(true);
-        });
-    }
+          return;
+        }
 
-    userBookManager
-      .getUserBook(bookId)
-      .then(book => setBook(book))
-      .catch((error) => {
-        console.log(error);
-        queryApi();
-      });
+        const queryApi = () => {
+          api
+            .getBook(bookId)
+            .then(book => {
+              if (book) {
+                setBook(new UserBookMapper().map(book));
+              } else {
+                setShowEmptyState(true);  
+              }
+            })
+            .catch((error) => {
+              console.log(error);
+              setShowEmptyState(true);
+            });
+        };
+
+        userBookManager
+          .getUserBook(bookId)
+          .then((book) => {
+            if (book) {
+              setBook(book);
+            } else {
+              queryApi();
+            }
+          })
+          .catch((error) => {
+            console.log(error);
+            queryApi();
+          });
+      } else {
+        history.replace("/");
+      }
+    })
       
-  }, []);
+  }, [history]);
 
   if (showEmptyState) {
     return (
-      <div
-        className="flex-center"
-        style={{
-          flexDirection: "column",
-          height: "100vh",
-        }}
-      >
-        <EmptyState />
-        <br />
-        <Button variant="contained" onClick={() => history.back()}>
-          Voltar
-        </Button>
-      </div>
+      <ShelfeDrawer selectedIndex={1}>
+        <div
+          className="flex-center"
+          style={{
+            flexDirection: "column",
+            height: "100vh",
+          }}
+        >
+          <EmptyState />
+          <br />
+          <Button variant="contained" onClick={() => history.back()}>
+            Voltar
+          </Button>
+        </div>
+      </ShelfeDrawer>
     );
   }
 
@@ -100,23 +125,18 @@ export default function Book() {
         md={book?.status === BookStatus.NotAdded ? 5 : 6}
         sx={{ transition: "300ms" }}
       >
-        <Box className="flex-center" sx={{ marginTop: "30px" }}>
+        <Box className="flex-center" sx={{ marginTop: "-74px" }}>
           {book ? (
-            book.imageUrls.map((url, i) => {
-              return (
-                <Card
-                  key={i.toString()}
-                  style={{
-                    borderRadius: "16px",
-                    width: "128px",
-                    height: "192px",
-                    margin: "16px",
-                  }}
-                >
-                  <img src={url} alt="Capa" height="100%" width="100%" />
-                </Card>
-              );
-            })
+            <Card
+              style={{
+                borderRadius: "16px",
+                width: "128px",
+                height: "192px",
+                margin: "16px",
+              }}
+            >
+              <img src={book.imageUrls[0]} alt="Capa" height="100%" width="100%" />
+            </Card>
           ) : (
             <Skeleton width={128} height={280} />
           )}
@@ -131,13 +151,12 @@ export default function Book() {
             book.status === BookStatus.NotAdded ? (
               <BrandButton
                 text="Adicionar à lista"
-                endIcon={ <Add /> }
+                endIcon={<Add />}
                 onClick={() => {
                   book.status = BookStatus.PlanToRead;
-                  userBookManager.setUserBook(book)
-                    .then(() => {
-                      setBook({ ...book })
-                    })
+                  userBookManager.setUserBook(book).then(() => {
+                    setBook({ ...book });
+                  });
                 }}
               ></BrandButton>
             ) : (
@@ -213,7 +232,7 @@ export default function Book() {
               marginRight: "8px",
             }}
           />
-          <Tooltip title="Adicionar página">
+          <Tooltip title="+1 página">
             <IconButton
               aria-label="add"
               onClick={() => {
@@ -224,7 +243,7 @@ export default function Book() {
               <AddCircleOutline sx={{ color: "#000" }} />
             </IconButton>
           </Tooltip>
-          <Tooltip title="Remover página">
+          <Tooltip title="-1 página">
             <IconButton
               aria-label="remove"
               onClick={() => {
@@ -233,6 +252,14 @@ export default function Book() {
               }}
             >
               <RemoveCircleOutline sx={{ color: "#000" }} />
+            </IconButton>
+          </Tooltip>
+          <Tooltip title="Editar progresso">
+            <IconButton
+              aria-label="edit"
+              onClick={() => setShowEditProgress(true)}
+            >
+              <ModeEditOutlined sx={{ color: "#000" }} />
             </IconButton>
           </Tooltip>
         </Box>
@@ -245,6 +272,36 @@ export default function Book() {
         >
           {progress}/{maxProgress}
         </Typography>
+
+        <Input
+          type="number"
+          defaultValue={manualProgress}
+          margin="dense"
+          inputProps={{
+            max: book.pageCount,
+            min: 0,
+          }}
+          sx={{
+            margin: "16px",
+            transition: "300ms",
+            display: showEditProgress ? "block" : "none",
+          }}
+          onKeyPress={(event) => {
+            if (event.key === "Enter") {
+              if (!isNaN(manualProgress) && manualProgress <= book.pageCount) {
+                book.progress = manualProgress;
+                updateBook({ progress: book.progress });
+              } 
+            }
+          }}
+          onChange={(event) => {
+            let newProgress = parseInt(event.target.value);
+            if (!isNaN(newProgress) && newProgress <= book.pageCount) {
+              setManualProgress(newProgress)
+            }
+          }}
+          autoFocus
+        />
 
         <Divider sx={{ marginTop: "16px", marginBottom: "16px" }} />
 
@@ -341,13 +398,11 @@ export default function Book() {
                 color="error"
                 onClick={() => {
                   setModalOpen(false);
-                  userBookManager
-                    .deleteUserBook(book)
-                    .then(() => {
-                      book.status = BookStatus.NotAdded;
-                      book.progress = 0;
-                      setBook({ ...book })
-                    })
+                  userBookManager.deleteUserBook(book).then(() => {
+                    book.status = BookStatus.NotAdded;
+                    book.progress = 0;
+                    setBook({ ...book });
+                  });
                 }}
                 sx={{ mt: 2, fontWeight: "700" }}
               >
@@ -370,12 +425,13 @@ export default function Book() {
               size="large"
               color="secondary"
               onClick={() => {
-                let text = `Dê uma olhada neste livro. 
-                Meu status atual é: ${parseBookStatus(book.status)}. 
+                const url = book.infoLink
+                  ? book.infoLink
+                  : encodeURIComponent(book.title);
+                let text = `Dê uma olhada neste livro.\n
+                Meu status atual é: ${parseBookStatus(book.status)}.\n
                 (${book.progress} de ${book.pageCount} páginas)`;
-                window.open(
-                  `https://t.me/share/url?url=${book.infoLink}&text=${text}`
-                );
+                window.open(`https://t.me/share/url?url=${url}&text=${text}`);
               }}
               sx={{
                 backgroundColor: "#E8EAF6",
@@ -402,14 +458,14 @@ export default function Book() {
   };
 
   return (
-    <Fragment>
+    <ShelfeDrawer selectedIndex={1}>
       <Container fixed>
         <Grid container spacing={4} rowSpacing={3}>
           <LeftGrid book={book} />
           <RightGrid />
         </Grid>
       </Container>
-    </Fragment>
+    </ShelfeDrawer>
   );
 }
 
@@ -419,6 +475,7 @@ function EmptyState() {
       className="flex-center"
       sx={{
         flexDirection: "column",
+        marginTop: "-240px"
       }}
     >
       <img
@@ -447,7 +504,7 @@ function LeftGrid(props: BookProps) {
       md={book?.status === BookStatus.NotAdded ? 7 : 6}
       sx={{ transition: "300ms" }}
     >
-      <Typography marginTop="42px" variant="h4">
+      <Typography variant="h4" marginTop="-64px">
         {book ? book.title : <Skeleton width={240} />}
       </Typography>
 

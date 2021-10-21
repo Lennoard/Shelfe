@@ -1,5 +1,5 @@
 
-import { Fragment, useState } from "react";
+import { Fragment, useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import {
   Container,
@@ -11,8 +11,8 @@ import {
   TextField,
   Card,
   Button,
-  Slide,
-  useScrollTrigger,
+  Skeleton,
+  ButtonBase,
 } from "@mui/material";
 
 import "./search.css";
@@ -22,42 +22,82 @@ import searchIllustration from "./images/imagery_search.png";
 import noResults from "./images/no-results.svg";
 import BookCard from "../../components/BookCard";
 import UserBookMapper from "../../data/mappers/UserBookMapper";
+import { getAuth } from "@firebase/auth";
+import ShelfeDrawer from "../../components/ShelfeDrawer";
 
 const api = new BooksApiManager();
 
-export default function Search(props: Props) {
+export default function Search() {
   const history = useHistory();
   const [searchResults, setSearchResults] = useState<Array<IBook>>([]);
   const [totalItems, setTotalItems] = useState(0);
   const [title, setTitle] = useState("Pesquisar");
   const [showEmptyState, setShowEmptyState] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
+  const [searching, setSearching] = useState(false);
 
-  const performSearch = () => {
-    api
-      .search(searchQuery)
-      .then(([itemsFound, books]) => {
-        setTotalItems(itemsFound);
-        setSearchResults(books);
-      })
-      .catch(() => setShowEmptyState(true))
-  }
+  useEffect(() => {
+    getAuth().onAuthStateChanged(user => {
+      if (!user) {
+        history.replace("/");
+        return
+      }
+
+      const performSearch = (query: string) => {
+        setSearching(true);
+        api
+          .search(query)
+          .then(([itemsFound, books]) => {
+            setSearching(false);
+            setTotalItems(itemsFound);
+            setSearchResults(books);
+          })
+          .catch(() => {
+            setSearching(false);
+            setShowEmptyState(true)
+          });
+      };
+
+      history.listen((location: any) => {
+        if (!location.search) {
+          setSearchResults([]);
+          setShowEmptyState(false);
+          return;
+        }
+
+        performSearch(
+          decodeURIComponent((location.search as string).replace("?q", ""))
+        );
+      });
+
+      const query = new URLSearchParams(window.location.search).get("q");
+      if (!query) return
+        
+      performSearch(decodeURIComponent(query));
+      setSearchQuery(query);
+
+    });
+  }, [history])
 
   if (showEmptyState) {
     return (
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          flexDirection: "column",
-          height: "100vh"
-        }}
-      >
-        <EmptyState query={searchQuery} />
-        <br />
-        <Button variant="contained" onClick={() => setShowEmptyState(false)}>Voltar</Button>
-      </div>
+      <ShelfeDrawer title={title} selectedIndex={1}>
+        <Box
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            flexDirection: "column",
+            height: "100vh",
+          }}
+        >
+          <EmptyState query={searchQuery} />
+          <br />
+          <Button variant="contained" onClick={() => setShowEmptyState(false)}>
+            Voltar
+          </Button>
+        </Box>
+      </ShelfeDrawer>
     );
   }
 
@@ -87,7 +127,7 @@ export default function Search(props: Props) {
                 onChange={(event) => setSearchQuery(event.target.value)}
                 onKeyPress={(event) => {
                   if (event.key === "Enter") {
-                    performSearch();
+                    history.push(`/search?q=${encodeURIComponent(searchQuery)}`);
                   }
                 }}
                 fullWidth
@@ -105,7 +145,7 @@ export default function Search(props: Props) {
     setTitle(`${totalItems} resultados para "${searchQuery}"`);
 
     return (
-      <Grid container spacing={4} rowSpacing={3} sx={{ marginTop: "36px" }}>
+      <Grid container spacing={4} rowSpacing={3}>
         {searchResults.flatMap((book) => {
           return (
             <Grid item xs={12} sm={6}>
@@ -129,30 +169,21 @@ export default function Search(props: Props) {
   }
 
   return (
-    <Fragment>
-      <HideOnScroll {...props}>
-        <AppBar position="fixed" color="transparent" elevation={0}>
-          <Toolbar>
-            <Typography marginTop="32px" variant="h4">
-              {title}
-            </Typography>
-          </Toolbar>
-        </AppBar>
-      </HideOnScroll>
-      <Toolbar />
+    <ShelfeDrawer title={title} selectedIndex={1}>
       <Container fixed>
-        {searchResults.length > 0 ? <SearchResultsGrid /> : <SearchGrid />}
+        {searching
+          ? <FakeSearchResultsGrid />
+          : searchResults.length > 0
+            ? <SearchResultsGrid />
+            : <SearchGrid />
+        }
       </Container>
-    </Fragment>
+    </ShelfeDrawer>
   );
 }
+
 interface EmptyStateProps {
   query: string;
-}
-
-interface Props {
-  window?: () => Window;
-  children: React.ReactElement;
 }
 
 function EmptyState(props: EmptyStateProps) {
@@ -177,18 +208,40 @@ function EmptyState(props: EmptyStateProps) {
   );
 }
 
-function HideOnScroll(props: Props) {
-  const { children, window } = props;
-  const trigger = useScrollTrigger({
-    target: window ? window() : undefined,
-    disableHysteresis: true,
-    threshold: 0,
-  });
-
+function FakeSearchResultsGrid() {
   return (
-    <Slide appear={false} direction="down" in={!trigger}>
-      {children}
-    </Slide>
+    <Grid container spacing={4} rowSpacing={3}>
+      {[1, 2, 3, 4, 5, 6].map(() => {
+        return (
+          <Grid item xs={12} sm={6}>
+            <Card>
+              <ButtonBase sx={{ width: "100%" }}>
+                <Skeleton width={128} height={240} />
+                <div className="bookCardContainer">
+                  <Typography
+                    className="title"
+                    marginTop="24px"
+                    variant="h6"
+                    noWrap
+                  >
+                    <Skeleton width={280} />
+                  </Typography>
+
+                  <Typography variant="body2">
+                    <Skeleton width={160} />
+                  </Typography>
+
+                  <Typography variant="body2" marginTop="42px">
+                    <Skeleton width={120} />
+                  </Typography>
+
+                  <Skeleton width={120} />
+                </div>
+              </ButtonBase>
+            </Card>
+          </Grid>
+        );
+      })}
+    </Grid>
   );
 }
-
