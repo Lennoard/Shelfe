@@ -1,45 +1,52 @@
-import { getAuth } from '@firebase/auth';
-import { getFirestore } from '@firebase/firestore';
-import { Container, Grid, Typography } from '@mui/material';
+import { getAuth } from "@firebase/auth";
+import { getFirestore } from "@firebase/firestore";
+import { useHistory } from "react-router-dom";
+import { Grid } from "@mui/material";
 import { useState, useEffect } from "react";
-import IUserBook from '../../data/models/book/IUserBook';
-
-import UserBookManagerImpl from '../../services/books/UserBookManagerImpl';
+import IUserBook from "../../data/models/book/IUserBook";
+import UserBookManagerImpl from "../../services/books/UserBookManagerImpl";
+import ShelfeDrawer from "../../components/ShelfeDrawer";
+import UserBookMapper from "../../data/mappers/UserBookMapper";
+import BookCard from "../../components/BookCard";
 
 const userBookManager = new UserBookManagerImpl(getAuth(), getFirestore());
 
 export default function Dashboard() {
+  const [userBooks, setUserBooks] = useState<Array<IUserBook>>([]);
+  const history = useHistory();
+
   useEffect(() => {
     userBookManager
       .getUserBooks()
       .then((books) => {
-        console.log(books);
-      }).catch((error) => {
+        setUserBooks(books);
+      })
+      .catch((error) => {
         console.error(error);
       });
-  });
+  }, []);
 
-  const [userBooks, setUserBooks] = useState<Array<IUserBook>>([]);
-  
+  let BookTotal =
+    userBooks.length > 0
+      ? userBooks.length + " Livros foram encontrados em sua conta."
+      : null;
+
   return (
-    <Container>
-      <Grid container rowSpacing={1} columnSpacing={4}>
-        <Grid item xs={6}>
-          <Typography marginTop="24px" variant="h3">
-            Dashboard
-          </Typography>
-        </Grid>
-        <Grid item xs={6}>
-          <Typography marginTop="24px" marginBottom="24px" variant="h4">
-            Books
-          </Typography>
-          <ol>
-            {userBooks.map((book) => (
-              <li>{book.title}</li>
-            ))}
-          </ol>
-        </Grid>
+    <ShelfeDrawer title={BookTotal} selectedIndex={0}>
+      <Grid container spacing={4} rowSpacing={3}>
+        {userBooks.flatMap((book) => {
+          return (
+            <Grid item xs={12} sm={6}>
+              <BookCard
+                book={book}
+                onClick={() => {
+                  history.push(`/book?id=${book.id}`);
+                }}
+              />
+            </Grid>
+          );
+        })}
       </Grid>
-    </Container>
+    </ShelfeDrawer>
   );
 }
