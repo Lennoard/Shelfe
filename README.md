@@ -21,6 +21,5 @@ https://www.figma.com/file/e2HCfoiHR6Nh7Rgb8OpzyN/Shelfe
 ## Techs
 - ReactJs
 - Google APIs (Sign in / Books)
-- Firebase
+- Firestore
 - UML
-- MVVM
