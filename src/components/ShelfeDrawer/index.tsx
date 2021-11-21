@@ -182,16 +182,15 @@ function UserCell(props: UserCellProps) {
   const user = props.user;
 
   return (
-    <Box className="flex-center" flexDirection="column" p={3}>
+    <Box p={3}>
       <Avatar
-        alt={user.displayName ? user.displayName : ""}
-        src={user.photoURL ? user.photoURL : ""}
-        sx={{ width: 80, height: 80 }}
+        src={user.photoURL || ""}
+        sx={{ width: 80, height: 80, margin: "auto" }}
       />
-      <Typography variant="h5" marginTop="8px">
+      <Typography variant="h5" marginTop="8px" textAlign="center">
         {user.displayName ? user.displayName : user.email?.split("@")[0]}
       </Typography>
-      <Typography variant="body1">
+      <Typography variant="body1" textAlign="center" noWrap>
         {user.email}
       </Typography>
     </Box>

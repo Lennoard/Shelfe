@@ -24,13 +24,20 @@ function GoogleLogo() {
 }
 
 
-export default function StyledComponents() {
+export default function StyledComponents(props: GoogleSignInButtonProps) {
   return (
     <GoogleSignInButton
       id="google-sign-in-button"
       variant="contained"
       startIcon={<GoogleLogo />}
-    >Entrar com Google
+      onClick={props.onClick}
+    >
+      {props.text}
     </GoogleSignInButton>
   );
+}
+
+export interface GoogleSignInButtonProps {
+  text: string;
+  onClick?: React.MouseEventHandler<HTMLButtonElement>;
 }
