@@ -1,6 +1,9 @@
 import {
   getAuth,
-  signInWithEmailAndPassword
+  signInWithEmailAndPassword,
+  signInWithPopup,
+  createUserWithEmailAndPassword,
+  GoogleAuthProvider
 } from "firebase/auth";
 import {
   Container,
@@ -8,10 +11,13 @@ import {
   Typography,
   Snackbar,
   SnackbarCloseReason,
+  Box,
+  Tabs,
+  Tab,
 } from "@mui/material";
 import LoadingButton from "@mui/lab/LoadingButton";
 import Grid from "@mui/material/Grid";
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import GoogleSignInButton from "../../components/GoogleSignInButton";
 import showLocalizedAuthError from "../../utils/auth/AuthErrors";
 import { useHistory } from "react-router-dom";
@@ -23,6 +29,7 @@ import initFirebase from "../../firebase";
 
 initFirebase();
 const auth = getAuth();
+auth.useDeviceLanguage();
 
 export interface IAuthCredential {
   email: string;
@@ -32,6 +39,18 @@ export interface IAuthCredential {
 export interface IToast {
   toastOpen: boolean;
   errorMessage: string;
+}
+
+interface TabPanelProps {
+  children?: React.ReactNode;
+  index: number;
+  value: number;
+}
+
+interface TabPanelProps {
+  children?: React.ReactNode;
+  index: number;
+  value: number;
 }
 
 export default function SignIn() {
@@ -45,15 +64,18 @@ export default function SignIn() {
     errorMessage: "Falha ao fazer login",
   });
   const [loading, setLoading] = useState(false);
+  const [activeTab, setActiveTab] = useState(0);
+  const [editingInPass, setEditingInPass] = useState(false);
+  const emailReference = useRef<HTMLInputElement>(null);
+  const passReference = useRef<HTMLInputElement>(null);
 
-  const handleSignInClick = async (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
+  const handleSignInClick = async (
+    e: React.MouseEvent<HTMLButtonElement> | null
+  ) => {
+    e?.preventDefault();
     setLoading(true);
 
-    const user = await performAuth(
-      credentials.email!!,
-      credentials.password!!
-    );
+    const user = await performAuth(credentials.email!!, credentials.password!!);
 
     if (user) {
       setLoading(false);
@@ -61,13 +83,67 @@ export default function SignIn() {
     }
   };
 
-  async function performAuth(
-    email: string,
-    password: string
-  ) {
+  const handleSignUpClick = async (
+    e: React.MouseEvent<HTMLButtonElement> | null
+  ) => {
+    e?.preventDefault();
+    setLoading(true);
+
+    const user = await performSignUp(credentials.email!!, credentials.password!!);
+
+    if (user) {
+      setLoading(false);
+      setToast({
+        toastOpen: true,
+        errorMessage: "Conta criada com sucesso",
+      });
+      setTimeout(() => {
+        history.push("/dashboard");
+      }, 2000);
+    }
+  };
+
+  const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
+    setActiveTab(newValue);
+    setCredentials({ ...credentials, email: "", password: "" });
+  };
+
+  async function performAuth(email: string, password: string) {
     try {
       const { user } = await signInWithEmailAndPassword(auth, email, password);
       return user;
+    } catch (error: any) {
+      setToast({
+        toastOpen: true,
+        errorMessage: showLocalizedAuthError(error.message),
+      });
+      setLoading(false);
+      return null;
+    }
+  }
+
+  async function performSignUp(email: string, password: string) {
+    try {
+      const { user } = await createUserWithEmailAndPassword(auth, email, password);
+      return user;
+    } catch (error: any) {
+      setToast({
+        toastOpen: true,
+        errorMessage: showLocalizedAuthError(error.message),
+      });
+      setLoading(false);
+      return null;
+    }
+  }
+
+  async function performGoogleSignIn() {
+    const provider = new GoogleAuthProvider();
+    try {
+      const { user } = await signInWithPopup(auth, provider);
+       if (user) {
+         setLoading(false);
+         history.push("/dashboard");
+       }
     } catch (error: any) {
       setToast({
         toastOpen: true,
@@ -86,6 +162,178 @@ export default function SignIn() {
     setToast({ ...toast, toastOpen: false });
   };
 
+  function SignInComponent(): JSX.Element {
+    useEffect(() => {
+      const currentEmailRef = emailReference.current;
+      const currentPassRef = passReference.current;
+
+      if (!editingInPass) {
+        currentEmailRef?.focus();
+      } else {
+        currentPassRef?.focus();
+      }
+    }, []);
+
+    return (
+      <Box display="flex" flexDirection="column">
+        <TextField
+          key="email"
+          type="email"
+          label="Email"
+          margin="dense"
+          inputRef={emailReference}
+          value={credentials.email}
+          onChange={(event) => {
+            setEditingInPass(false);
+            setCredentials({ ...credentials, email: event.target.value });
+          }}
+          onKeyPress={(event) => {
+            if (event.key === "Enter") {
+              handleSignInClick(null);
+            }
+          }}
+          required
+        />
+
+        <TextField
+          inputRef={passReference}
+          key="password"
+          type="password"
+          label="Senha"
+          margin="dense"
+          value={credentials.password}
+          onChange={(event) => {
+            setEditingInPass(true);
+            setCredentials({ ...credentials, password: event.target.value });
+          }}
+          onKeyPress={(event) => {
+            if (event.key === "Enter") {
+              handleSignInClick(null);
+            }
+          }}
+          required
+        />
+
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: {
+              xs: "column",
+              sm: "column",
+              md: "row",
+              lg: "row",
+            },
+          }}
+        >
+          <LoadingButton
+            loading={loading}
+            variant="outlined"
+            sx={{ marginTop: "32px" }}
+            onClick={(e) => handleSignInClick(e)}
+          >
+            Entrar com email
+          </LoadingButton>
+          <GoogleSignInButton
+            text="Entrar com Google"
+            onClick={(e) => performGoogleSignIn()}
+          />
+
+          <Snackbar
+            open={toast.toastOpen}
+            autoHideDuration={3000}
+            onClose={handleToastClose}
+            message={toast.errorMessage}
+          />
+        </Box>
+      </Box>
+    );
+  }
+
+  function SignUpComponent(): JSX.Element {
+    useEffect(() => {
+      const currentEmailRef = emailReference.current;
+      const currentPassRef = passReference.current;
+
+      if (!editingInPass) {
+        currentEmailRef?.focus();
+      } else {
+        currentPassRef?.focus();
+      }
+    }, []);
+
+    return (
+      <Box display="flex" flexDirection="column">
+        <TextField
+          key="email"
+          type="email"
+          label="Email"
+          margin="dense"
+          inputRef={emailReference}
+          value={credentials.email}
+          onChange={(event) => {
+            setEditingInPass(false);
+            setCredentials({ ...credentials, email: event.target.value });
+          }}
+          onKeyPress={(event) => {
+            if (event.key === "Enter") {
+              handleSignUpClick(null);
+            }
+          }}
+          required
+        />
+
+        <TextField
+          inputRef={passReference}
+          key="password"
+          type="password"
+          label="Senha"
+          margin="dense"
+          value={credentials.password}
+          onChange={(event) => {
+            setEditingInPass(true);
+            setCredentials({ ...credentials, password: event.target.value });
+          }}
+          onKeyPress={(event) => {
+            if (event.key === "Enter") {
+              handleSignUpClick(null);
+            }
+          }}
+          required
+        />
+
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: {
+              xs: "column",
+              sm: "column",
+              md: "row",
+              lg: "row",
+            },
+          }}
+        >
+          <LoadingButton
+            loading={loading}
+            variant="outlined"
+            sx={{ marginTop: "32px" }}
+            onClick={(e) => handleSignUpClick(e)}
+          >
+            Cadastrar com email
+          </LoadingButton>
+
+          <GoogleSignInButton text="Cadastrar com Google" onClick={(e) => performGoogleSignIn()} />
+
+          <Snackbar
+            open={toast.toastOpen}
+            autoHideDuration={3000}
+            onClose={handleToastClose}
+            message={toast.errorMessage}
+          />
+        </Box>
+      </Box>
+    );
+  }
+
   return (
     <Container fixed>
       <Grid container rowSpacing={1} columnSpacing={4}>
@@ -94,53 +342,57 @@ export default function SignIn() {
           <Typography marginTop="24px" variant="h3">
             Shelfe
           </Typography>
-          <Typography marginTop="16px" variant="body1">
+          <Typography marginTop="16px" variant="body1" textAlign="center">
             Gerenciador de progresso de leitura e resenhas de livros
           </Typography>
         </Grid>
         <Grid id="right" item xs={6}>
-          <TextField
-            id="email"
-            type="email"
-            label="Email"
-            margin="dense"
-            onChange={(event) =>
-              setCredentials({ ...credentials, email: event.target.value })
-            }
-            required
-          />
-
-          <TextField
-            id="password"
-            type="password"
-            label="Senha"
-            margin="dense"
-            onChange={(event) =>
-              setCredentials({ ...credentials, password: event.target.value })
-            }
-            required
-          />
-
-          <div>
-            <LoadingButton
-              loading={loading}
-              id="sign-in-button"
-              variant="outlined"
-              onClick={(e) => handleSignInClick(e)}
+          <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+            <Tabs
+              value={activeTab}
+              onChange={handleTabChange}
+              aria-label="basic tabs example"
             >
-              Entrar com email
-            </LoadingButton>
-            <GoogleSignInButton />
-
-            <Snackbar
-              open={toast.toastOpen}
-              autoHideDuration={3000}
-              onClose={handleToastClose}
-              message={toast.errorMessage}
-            />
-          </div>
+              <Tab label="Entrar" {...a11yProps(0)} />
+              <Tab label="Cadastrar" {...a11yProps(1)} />
+            </Tabs>
+          </Box>
+          
+          <TabPanel value={activeTab} index={0}>
+            <SignInComponent />
+          </TabPanel>
+          <TabPanel value={activeTab} index={1}>
+            <SignUpComponent />
+          </TabPanel>
         </Grid>
       </Grid>
     </Container>
+  );
+}
+
+function a11yProps(index: number) {
+  return {
+    id: `tab-${index}`,
+    "aria-controls": `tabpanel-${index}`,
+  };
+}
+
+function TabPanel(props: TabPanelProps) {
+  const { children, value, index, ...other } = props;
+
+  return (
+    <div
+      role="tabpanel"
+      hidden={value !== index}
+      id={`tabpanel-${index}`}
+      aria-labelledby={`tab-${index}`}
+      {...other}
+    >
+      {value === index && (
+        <Box sx={{ p: 3 }}>
+          <Typography>{children}</Typography>
+        </Box>
+      )}
+    </div>
   );
 }

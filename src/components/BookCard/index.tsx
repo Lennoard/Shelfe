@@ -1,5 +1,11 @@
 import { Favorite, Star } from "@mui/icons-material";
-import { Card, Typography, Box, LinearProgress, ButtonBase } from "@mui/material";
+import {
+  Card,
+  Typography,
+  Box,
+  LinearProgress,
+  ButtonBase,
+} from "@mui/material";
 import IUserBook from "../../data/models/book/IUserBook";
 
 import "./style.css";
@@ -29,7 +35,9 @@ export default function BookCard(props: BookCardProps) {
         <img className="bookCardImage" src={imageUrl} alt="Capa" />
         <div className="bookCardContainer">
           <Typography className="title" marginTop="24px" variant="h6" noWrap>
-            {book.title}
+            {book.title.length <= 30
+              ? book.title
+              : book.title.substring(0, 30) + "..."}
           </Typography>
 
           <Typography variant="body2">{book.authors}</Typography>

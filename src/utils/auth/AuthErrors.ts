@@ -8,9 +8,16 @@ export default function showLocalizedAuthError(message: string) {
   }
 
   if (message.includes("user-not-found")) {
-    return "Endereço de email ou senha inválidos";
+    return "Endereço de email ou senha inválidos.";
+  }
+  
+  if (message.includes("email-already-in-use")) {
+    return "Este endereço de email já está sendo utilizado.";
+  }
+  
+  if (message.includes("invalid-email")) {
+    return "Endereço de email inválido.";
   }
 
   return "Falha de autenticação";
-
 }

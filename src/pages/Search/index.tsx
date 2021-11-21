@@ -1,4 +1,3 @@
-
 import { Fragment, useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import {
@@ -39,10 +38,10 @@ export default function Search() {
   const [searching, setSearching] = useState(false);
 
   useEffect(() => {
-    getAuth().onAuthStateChanged(user => {
+    getAuth().onAuthStateChanged((user) => {
       if (!user) {
         history.replace("/");
-        return
+        return;
       }
 
       const performSearch = (query: string) => {
@@ -73,9 +72,9 @@ export default function Search() {
               });
           })
           .catch((error) => {
-            console.warn(error)
+            console.warn(error);
             setSearching(false);
-            setShowEmptyState(true)
+            setShowEmptyState(true);
           });
       };
 
@@ -92,12 +91,12 @@ export default function Search() {
       });
 
       const query = new URLSearchParams(window.location.search).get("q");
-      if (!query) return
-        
+      if (!query) return;
+
       performSearch(decodeURIComponent(query));
       setSearchQuery(query);
     });
-  }, [history])
+  }, [history]);
 
   if (showEmptyState) {
     return (
@@ -128,7 +127,7 @@ export default function Search() {
           sx={{
             flexDirection: "column",
             height: "100vh",
-            marginTop: "-160px"
+            marginTop: "-160px",
           }}
         >
           <img id="imagery" src={searchIllustration} alt="Pesquisar" />
@@ -145,7 +144,9 @@ export default function Search() {
                 onChange={(event) => setSearchQuery(event.target.value)}
                 onKeyPress={(event) => {
                   if (event.key === "Enter") {
-                    history.push(`/search?q=${encodeURIComponent(searchQuery)}`);
+                    history.push(
+                      `/search?q=${encodeURIComponent(searchQuery)}`
+                    );
                   }
                 }}
                 fullWidth
@@ -173,28 +174,34 @@ export default function Search() {
             </Grid>
           );
         })}
-        <Grid item xs={12}
+        <Grid
+          item
+          xs={12}
           sx={{
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
-            margin: "36px"
-          }}>
-          <Button variant="contained" onClick={() => setSearchResults([])}>Voltar</Button>
+            margin: "36px",
+          }}
+        >
+          <Button variant="contained" onClick={() => setSearchResults([])}>
+            Voltar
+          </Button>
         </Grid>
       </Grid>
     );
-  }
+  };
 
   return (
     <ShelfeDrawer title={title} selectedIndex={1}>
       <Container fixed>
-        {searching
-          ? <FakeSearchResultsGrid />
-          : searchResults.length > 0
-            ? <SearchResultsGrid />
-            : <SearchGrid />
-        }
+        {searching ? (
+          <FakeSearchResultsGrid />
+        ) : searchResults.length > 0 ? (
+          <SearchResultsGrid />
+        ) : (
+          <SearchGrid />
+        )}
       </Container>
     </ShelfeDrawer>
   );
@@ -210,15 +217,20 @@ function EmptyState(props: EmptyStateProps) {
       className="flex-center"
       sx={{
         flexDirection: "column",
-        marginTop: "-160px"
+        marginTop: "-160px",
       }}
     >
-      <img id="empty-state-image" src={noResults} alt="Nenhum resultado encontrado" />
+      <img
+        id="empty-state-image"
+        src={noResults}
+        alt="Nenhum resultado encontrado"
+      />
       <Typography
         color="rgba(0,0,0,.54)"
         marginTop="24px"
         variant="h4"
-        textAlign="center" >
+        textAlign="center"
+      >
         Nenhum resultado encontrado para <br />"{props.query}"
       </Typography>
     </Box>
@@ -231,9 +243,9 @@ function FakeSearchResultsGrid() {
       {[1, 2, 3, 4, 5, 6].map(() => {
         return (
           <Grid item xs={12} sm={6}>
-            <Card>
+            <Card sx={{ borderRadius: "12px" }}>
               <ButtonBase sx={{ width: "100%" }}>
-                <Skeleton width={128} height={240} />
+                <Skeleton width={128} height={200} sx={{ marginLeft: 1 }} />
                 <div className="bookCardContainer">
                   <Typography
                     className="title"
