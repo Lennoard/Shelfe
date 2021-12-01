@@ -9,7 +9,7 @@ function Routes() {
     <BrowserRouter>
       <Switch>
           <Route path="/" exact component={SignIn}></Route>
-          <Route path="/dashboard" component={Dashboard}></Route>
+          <Route path="/dashboard/:sortBy?/:orderBy?" component={Dashboard}></Route>
           <Route path="/search" component={Search}></Route>
           <Route path="/book:id?" component={Book}></Route>
       </Switch>
