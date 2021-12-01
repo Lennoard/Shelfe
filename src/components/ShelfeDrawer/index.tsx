@@ -91,6 +91,7 @@ export default function ShelfeDrawer(props: DrawerProps) {
           }}
         >
           <Toolbar>
+          
             <IconButton
               color="inherit"
               aria-label="open drawer"
@@ -103,6 +104,7 @@ export default function ShelfeDrawer(props: DrawerProps) {
             <Typography marginTop="32px" variant="h4">
               {props.title}
             </Typography>
+            {props.filters}
           </Toolbar>
         </AppBar>
       </HideOnScroll>
@@ -146,7 +148,9 @@ export default function ShelfeDrawer(props: DrawerProps) {
         >
           {drawer}
         </Drawer>
+        
       </Box>
+      
       <Box
         component="main"
         sx={{
@@ -202,6 +206,7 @@ interface DrawerProp {
   items: IDrawerItem[] | null;
   selectedIndex: number;
   children: React.ReactElement;
+  filters: JSX.Element;
 }
 
 interface DrawerProps extends Partial<DrawerProp> {}

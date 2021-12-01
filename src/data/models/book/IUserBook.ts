@@ -9,5 +9,6 @@ export default interface IUserBook extends IBook {
   lastStatus: Date,
   favorite: boolean,
   lastModified: Date,
-  notes: INote[] | null
+  notes: INote[] | null,
+  statusRank: number
 }
