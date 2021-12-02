@@ -1,4 +1,4 @@
-import { Fragment, useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import {
   Container,
@@ -17,11 +17,13 @@ import {
   Modal,
   Input,
   Rating,
+  TextField,
 } from "@mui/material";
 
 import BooksApiManager from "../../services/BooksApiManager";
 import noResults from "./images/no-results.svg";
 import IUserBook from "../../data/models/book/IUserBook";
+import INote from "../../data/models/INote";
 import parseBookStatus, { BookStatus } from "../../domain/BookStatus";
 import UserBookManagerImpl from "../../services/books/UserBookManagerImpl";
 import { getFirestore, UpdateData } from "@firebase/firestore";
@@ -35,11 +37,12 @@ import {
   KeyboardArrowDown,
   ModeEditOutlined,
   RemoveCircleOutline,
-  Share
+  Share,
 } from "@mui/icons-material";
 import BrandButtonSelect from "../../components/BrandButtonSelect";
 import UserBookMapper from "../../data/mappers/UserBookMapper";
 import ShelfeDrawer from "../../components/ShelfeDrawer";
+import { width } from "@mui/system";
 
 const api = new BooksApiManager();
 const userBookManager = new UserBookManagerImpl(getAuth(), getFirestore());
@@ -48,13 +51,15 @@ export default function Book() {
   const history = useHistory();
   const [showEmptyState, setShowEmptyState] = useState(false);
   const [book, setBook] = useState<IUserBook | null>(null);
-  const [openModal, setModalOpen] = useState(false);
+  const [openDeleteModal, setDeleteModalOpen] = useState(false);
+  const [openAddNoteModal, setAddNoteModalOpen] = useState(false);
   const [showEditProgress, setShowEditProgress] = useState(false);
   const [manualProgress, setManualProgress] = useState(0);
-  const handleCloseModal = () => setModalOpen(false);
+  const handleCloseModal = () => setDeleteModalOpen(false);
+  const handleCloseAddNoteModal = () => setAddNoteModalOpen(false);
 
   useEffect(() => {
-    getAuth().onAuthStateChanged(user => {
+    getAuth().onAuthStateChanged((user) => {
       if (user) {
         const bookId = new URLSearchParams(window.location.search).get("id");
         if (!bookId) {
@@ -65,11 +70,11 @@ export default function Book() {
         const queryApi = () => {
           api
             .getBook(bookId)
-            .then(book => {
+            .then((book) => {
               if (book) {
                 setBook(new UserBookMapper().map(book));
               } else {
-                setShowEmptyState(true);  
+                setShowEmptyState(true);
               }
             })
             .catch((error) => {
@@ -94,8 +99,7 @@ export default function Book() {
       } else {
         history.replace("/");
       }
-    })
-      
+    });
   }, [history]);
 
   if (showEmptyState) {
@@ -119,10 +123,24 @@ export default function Book() {
   }
 
   const RightGrid = () => {
+    const modalStyle = {
+      position: "absolute" as "absolute",
+      top: "50%",
+      left: "50%",
+      transform: "translate(-50%, -50%)",
+      width: 400,
+      bgcolor: "background.paper",
+      borderRadius: "16px",
+      boxShadow: 24,
+      p: 4,
+    };
+
     const imageUrl =
       book == null || book.imageUrls.length === 0
         ? "https://via.placeholder.com/128x192?text=SEM+IMAGEM"
         : book!!.imageUrls[0];
+
+    const bookNotes = book?.notes ?? [];
     return (
       <Grid
         item
@@ -146,12 +164,7 @@ export default function Book() {
             <Skeleton width={128} height={280} />
           )}
         </Box>
-        <Box
-          className="flex-center"
-          sx={{
-            marginTop: "30px",
-          }}
-        >
+        <Box marginTop="30px">
           {book ? (
             book.status === BookStatus.NotAdded ? (
               <BrandButton
@@ -170,6 +183,152 @@ export default function Book() {
           ) : (
             <Skeleton width={160} sx={{ textAlign: "center" }} />
           )}
+
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              marginTop: "32px",
+            }}
+          >
+            <Typography variant="body1" fontWeight="600" sx={{ flexGrow: 1 }}>
+              Anotações
+            </Typography>
+
+            <BrandButton
+              text="Adicionar"
+              endIcon={<Add />}
+              onClick={() => setAddNoteModalOpen(true)}
+            />
+          </Box>
+
+          <Modal
+            open={openAddNoteModal}
+            onClose={handleCloseAddNoteModal}
+            aria-labelledby="modal-modal-title"
+            aria-describedby="modal-modal-description"
+          >
+            <Box sx={modalStyle}>
+              <Typography id="modal-modal-title" variant="h4" component="h2">
+                Adicionar nota
+              </Typography>
+
+              <TextField
+                id="addNoteNotes"
+                key="addNoteNotes"
+                type="text"
+                label="Anotações"
+                sx={{ marginTop: "24px", width: "100%" }}
+                required
+                autoFocus
+              />
+
+              <TextField
+                id="addNoteChapter"
+                key="addNoteChapter"
+                type="number"
+                label="Capítulo"
+                sx={{ marginTop: "16px", width: "100%" }}
+                required
+              />
+
+              <br />
+              <Button
+                variant="text"
+                color="primary"
+                onClick={() => {
+                  let notes = (document.getElementById("addNoteNotes") as HTMLInputElement).value
+                  let chapter = parseInt((document.getElementById("addNoteChapter") as HTMLInputElement).value)
+                  let note = {
+                    notes: notes,
+                    chapter: chapter,
+                    createdAt: new Date(),
+                  } as INote;
+
+                  setAddNoteModalOpen(false);
+                  bookNotes.push(note)
+                  book!!.notes = bookNotes;
+
+                  updateBook({ notes: book!!.notes });
+                }}
+                sx={{ mt: 2, fontWeight: "700" }}
+              >
+                Adicionar
+              </Button>
+              <Button
+                variant="text"
+                onClick={() => {
+                  setAddNoteModalOpen(false);
+                }}
+                sx={{ mt: 2, fontWeight: "700", color: "black" }}
+              >
+                Cancelar
+              </Button>
+            </Box>
+          </Modal>
+
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+            }}
+          >
+            {bookNotes.length > 0 ? (
+              bookNotes.map((note) => {
+                return (
+                  <Box>
+                    <Divider sx={{ marginTop: "16px", marginBottom: "16px" }} />
+                    <Box
+                      sx={{
+                        display: "flex",
+                        alignItems: "center",
+                      }}
+                    >
+                      <Typography
+                        variant="body2"
+                        color="#212121"
+                        sx={{ flexGrow: 1 }}
+                      >
+                        {note.notes}
+                      </Typography>
+
+                      <Divider orientation="horizontal" />
+
+                      <Tooltip title="Deletar nota">
+                        <IconButton
+                          color="error"
+                          onClick={() => {
+                            if (book == null) return;
+
+                            book.progress++;
+                            let index = bookNotes.indexOf(note);
+                            bookNotes.splice(index, 1);
+                            book.notes = bookNotes;
+
+                            updateBook({ notes: book.notes });
+                          }}
+                          sx={{
+                            backgroundColor: "#FFEBEE",
+                            marginLeft: "16px",
+                          }}
+                        >
+                          <DeleteOutlineOutlined />
+                        </IconButton>
+                      </Tooltip>
+                    </Box>
+                  </Box>
+                );
+              })
+            ) : (
+              <Typography
+                variant="body2"
+                color="rgba(0,0,0,.54)"
+                sx={{ flexGrow: 1 }}
+              >
+                Nenhuma anotação adicionada
+              </Typography>
+            )}
+          </Box>
         </Box>
       </Grid>
     );
@@ -351,7 +510,9 @@ export default function Book() {
             padding: "8px 16px",
           }}
         >
-          <Typography flexGrow={1} component="legend">Nota</Typography>
+          <Typography flexGrow={1} component="legend">
+            Nota
+          </Typography>
           <Rating
             name="rating"
             defaultValue={book.userRating ? book.userRating : 0}
@@ -394,7 +555,7 @@ export default function Book() {
               size="large"
               color="error"
               onClick={() => {
-                setModalOpen(true);
+                setDeleteModalOpen(true);
               }}
               sx={{
                 backgroundColor: "#FFEBEE",
@@ -405,7 +566,7 @@ export default function Book() {
             </IconButton>
           </Tooltip>
           <Modal
-            open={openModal}
+            open={openDeleteModal}
             onClose={handleCloseModal}
             aria-labelledby="modal-modal-title"
             aria-describedby="modal-modal-description"
@@ -422,7 +583,7 @@ export default function Book() {
                 variant="text"
                 color="error"
                 onClick={() => {
-                  setModalOpen(false);
+                  setDeleteModalOpen(false);
                   userBookManager.deleteUserBook(book).then(() => {
                     book.status = BookStatus.NotAdded;
                     book.progress = 0;
@@ -436,7 +597,7 @@ export default function Book() {
               <Button
                 variant="text"
                 onClick={() => {
-                  setModalOpen(false);
+                  setDeleteModalOpen(false);
                 }}
                 sx={{ mt: 2, fontWeight: "700", color: "black" }}
               >
@@ -500,7 +661,7 @@ function EmptyState() {
       className="flex-center"
       sx={{
         flexDirection: "column",
-        marginTop: "-240px"
+        marginTop: "-240px",
       }}
     >
       <img

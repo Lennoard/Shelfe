@@ -1,8 +1,17 @@
-import { Button } from "@mui/material";
+import { Button, styled } from "@mui/material";
+
+
 
 export default function BrandButton(props: BrandButtonProps) {
+  const StyledButton = styled(Button)`
+    transition: 400ms;
+    &:hover {
+      background-color: ${props.hoverColor ?? "#00bfa5"};
+    }
+  `;
+
   return (
-    <Button
+    <StyledButton
       onClick={props.onClick}
       endIcon={props.endIcon}
       variant="contained"
@@ -18,13 +27,14 @@ export default function BrandButton(props: BrandButtonProps) {
       }}
     >
       {props.text}
-    </Button>
+    </StyledButton>
   );
 }
 
 export interface BrandButtonProps {
   text: string;
   backgroundColor?: string;
+  hoverColor?: string;
   textColor?: string;
   endIcon?: React.ReactNode;
   onClick?: React.MouseEventHandler<HTMLButtonElement>;
