@@ -78,6 +78,10 @@ export default class UserBookManagerImpl implements IUserBookManager {
     return await deleteDoc(docRef);
   }
 
+  deleteUserData() {
+    return Promise.reject();
+  }
+
   uid() {
     return this.auth.currentUser!!.uid;
   }

@@ -19,5 +19,9 @@ export default function showLocalizedAuthError(message: string) {
     return "Endereço de email inválido.";
   }
 
+  if (message.includes("requires-recent-login")) {
+    return "Por favor, faça login novamente";
+  }
+
   return "Falha de autenticação";
 }
