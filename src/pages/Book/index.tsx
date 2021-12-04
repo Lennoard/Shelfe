@@ -284,13 +284,14 @@ export default function Book() {
                         alignItems: "center",
                       }}
                     >
-                      <Typography
-                        variant="body2"
-                        color="#212121"
-                        sx={{ flexGrow: 1 }}
-                      >
-                        {note.notes}
-                      </Typography>
+                      <Box sx={{ flexGrow: 1 }}>
+                        <Typography variant="body2" color="#212121">
+                          {note.notes}
+                        </Typography>
+                        <Typography variant="body2" color="rgba(0,0,0,.54)">
+                          Capítulo {note.chapter}
+                        </Typography>
+                      </Box>
 
                       <Divider orientation="horizontal" />
 
