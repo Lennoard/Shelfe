@@ -125,9 +125,6 @@ export default function Dashboard() {
   }
 }
 
-/**
- * This function returns a JSX element to be sent to the drawner filter, it is activated during any filter state change
- */
 const GetFilterButtons = () => {
   const buttonFilter = {
     name: "Classificar",
