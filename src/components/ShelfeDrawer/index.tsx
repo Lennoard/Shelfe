@@ -101,7 +101,7 @@ export default function ShelfeDrawer(props: DrawerProps) {
             >
               <MenuIcon />
             </IconButton>
-            <Typography marginTop="32px" variant="h4">
+            <Typography marginTop="32px" variant="h4" flexGrow={1} >
               {props.title}
             </Typography>
             {props.filters}
