@@ -48,19 +48,27 @@ export default function Dashboard() {
         setDataLoaded(true);
       });
     });
-  }, [sortBy, orderBy]);
+  }, [sortBy, orderBy, history]);
 
-  let qntBooksInAccount =
+  let toolbarTitle =
     userBooks.length > 0
-      ? userBooks.length + " Livros foram encontrados em sua conta."
-      : "Procurando lista de livros...";
+      ? "Coleção"
+      : "Procurando lista de livros…";
 
   const filterButtons = GetFilterButtons();
 
   if (userBooks.length > 0 && isDataLoaded) {
     return (
-      <ShelfeDrawer title={qntBooksInAccount} filters={filterButtons}>
+      <ShelfeDrawer title={toolbarTitle} selectedIndex={0} filters={filterButtons}>
         <Grid container spacing={4} rowSpacing={3}>
+          <Grid item xs={12}>
+            <Typography variant="h6">
+              {userBooks.length > 0
+                ? userBooks.length + " Livros foram encontrados em sua conta."
+                : ""}
+            </Typography>
+          </Grid>
+
           {userBooks.flatMap((book, i) => {
             return (
               <Grow in={isDataLoaded}>
@@ -116,7 +124,7 @@ export default function Dashboard() {
     );
   } else {
     return (
-      <ShelfeDrawer title={qntBooksInAccount}>
+      <ShelfeDrawer title={toolbarTitle}>
         <Grid container spacing={4} rowSpacing={3}>
           {booksLoadingSkeleton()}
         </Grid>
