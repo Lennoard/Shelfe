@@ -1,7 +1,5 @@
 import { Auth } from "@firebase/auth";
-import { deleteDoc, doc, Firestore, updateDoc } from "@firebase/firestore";
-import { accessSync } from "fs";
-import IUserBook from "../../data/models/book/IUserBook";
+import { deleteDoc, doc, Firestore } from "@firebase/firestore";
 import IFirestoreManager from "./IFirestoreManager";
 
 export default class FirestoreManagerImpl implements IFirestoreManager {

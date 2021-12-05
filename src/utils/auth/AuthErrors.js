@@ -1,4 +1,4 @@
-export default function showLocalizedAuthError(message: string) {
+export default function showLocalizedAuthError(message) {
   if (message.includes("wrong-password")) {
     return "A senha é inválida ou o usuário não tem uma senha";
   }

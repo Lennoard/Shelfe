@@ -1,4 +1,4 @@
-import { Favorite, Star } from "@mui/icons-material";
+import { Star } from "@mui/icons-material";
 import {
   Card,
   Typography,
