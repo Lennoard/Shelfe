@@ -42,7 +42,6 @@ import {
 import BrandButtonSelect from "../../components/BrandButtonSelect";
 import UserBookMapper from "../../data/mappers/UserBookMapper";
 import ShelfeDrawer from "../../components/ShelfeDrawer";
-import { width } from "@mui/system";
 
 const api = new BooksApiManager();
 const userBookManager = new UserBookManagerImpl(getAuth(), getFirestore());

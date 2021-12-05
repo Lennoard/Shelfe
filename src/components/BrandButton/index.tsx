@@ -1,7 +1,5 @@
 import { Button, styled } from "@mui/material";
 
-
-
 export default function BrandButton(props: BrandButtonProps) {
   const StyledButton = styled(Button)`
     transition: 400ms;

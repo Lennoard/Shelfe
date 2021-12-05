@@ -1,7 +1,6 @@
 import * as React from "react";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
-import Divider from "@mui/material/Divider";
 import Drawer from "@mui/material/Drawer";
 import IconButton from "@mui/material/IconButton";
 import List from "@mui/material/List";
@@ -13,7 +12,11 @@ import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import { Avatar, Slide, useScrollTrigger } from "@mui/material";
 import { IDrawerItem } from "./IDrawerItem";
-import { HomeOutlined, SearchOutlined, SettingsOutlined } from "@mui/icons-material";
+import {
+  HomeOutlined,
+  SearchOutlined,
+  SettingsOutlined,
+} from "@mui/icons-material";
 import { useHistory } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { getAuth, User } from "@firebase/auth";
@@ -49,28 +52,49 @@ export default function ShelfeDrawer(props: DrawerProps) {
   };
 
   useEffect(() => {
-    getAuth().onAuthStateChanged(user => setUser(user));
-  }, [])
+    getAuth().onAuthStateChanged((user) => setUser(user));
+  }, []);
 
   const drawer = (
     <div>
       {user ? <UserCell user={user} /> : <Toolbar />}
       <List>
-        {(props.items ? props.items : defaultItems).map((item, index) => (
-          <ListItem
-            button
-            className={
-              index === props.selectedIndex
-                ? "shelfeListItem selected"
-                : "shelfeListItem"
-            }
-            key={item.title}
-            onClick={() => history.push(item.route)}
-          >
-            <ListItemIcon>{item.icon}</ListItemIcon>
-            <ListItemText primary={item.title} />
-          </ListItem>
-        ))}
+        {(props.items ? props.items : defaultItems).map((item, index) => {
+          if (props.selectedIndex === index) {
+            return (
+              <Slide direction="right" in={true}>
+                <ListItem
+                  button
+                  className={
+                    index === props.selectedIndex
+                      ? "shelfeListItem selected"
+                      : "shelfeListItem"
+                  }
+                  key={item.title}
+                  onClick={() => history.push(item.route)}
+                >
+                  <ListItemIcon>{item.icon}</ListItemIcon>
+                  <ListItemText primary={item.title} />
+                </ListItem>
+              </Slide>
+            );
+          } else
+            return (
+              <ListItem
+                button
+                className={
+                  index === props.selectedIndex
+                    ? "shelfeListItem selected"
+                    : "shelfeListItem"
+                }
+                key={item.title}
+                onClick={() => history.push(item.route)}
+              >
+                <ListItemIcon>{item.icon}</ListItemIcon>
+                <ListItemText primary={item.title} />
+              </ListItem>
+            );
+        })}
       </List>
     </div>
   );
@@ -91,7 +115,6 @@ export default function ShelfeDrawer(props: DrawerProps) {
           }}
         >
           <Toolbar>
-          
             <IconButton
               color="inherit"
               aria-label="open drawer"
@@ -101,7 +124,7 @@ export default function ShelfeDrawer(props: DrawerProps) {
             >
               <MenuIcon />
             </IconButton>
-            <Typography marginTop="32px" variant="h4" flexGrow={1} >
+            <Typography marginTop="32px" variant="h4" flexGrow={1}>
               {props.title}
             </Typography>
             {props.filters}
@@ -148,9 +171,8 @@ export default function ShelfeDrawer(props: DrawerProps) {
         >
           {drawer}
         </Drawer>
-        
       </Box>
-      
+
       <Box
         component="main"
         sx={{
@@ -210,11 +232,9 @@ interface DrawerProp {
 }
 
 interface DrawerProps extends Partial<DrawerProp> {}
-
 interface AppBarProps {
   children: React.ReactElement;
 }
-
 interface UserCellProps {
   user: User;
 }
