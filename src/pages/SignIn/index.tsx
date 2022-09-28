@@ -155,7 +155,7 @@ export default function SignIn() {
   }
 
   const handleToastClose = (
-    _: React.SyntheticEvent<any, Event>,
+    _: Event | React.SyntheticEvent<any, Event>,
     reason: SnackbarCloseReason
   ) => {
     if (reason === "clickaway") return;
