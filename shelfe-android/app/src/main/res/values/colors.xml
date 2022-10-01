@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="cyan_50">#e1f1f2</color>
+    <color name="cyan_100">#b3dcdf</color>
+    <color name="cyan_200">#81c6c9</color>
+    <color name="cyan_300">#50b0b3</color>
+    <color name="cyan_400">#2f9fa1</color>
+    <color name="cyan_500">#1a8e8e</color>
+    <color name="cyan_600">#188281</color>
+    <color name="cyan_700">#167270</color>
+    <color name="cyan_800">#166260</color>
+    <color name="cyan_900">#104743</color>
+    <color name="cyan_1000">#011918</color>
+
+    <color name="sea_green_50">#d3fdf3</color>
+    <color name="sea_green_100">#8ef9dc</color>
+    <color name="sea_green_200">#47f1c8</color>
+    <color name="sea_green_300">#00e4b4</color>
+    <color name="sea_green_400">#00d8a3</color>
+    <color name="sea_green_500">#00cd95</color>
+    <color name="sea_green_600">#00bd86</color>
+    <color name="sea_green_700">#00ab75</color>
+    <color name="sea_green_800">#009a67</color>
+    <color name="sea_green_900">#007c48</color>
+    <color name="sea_green_1000">#023922</color>
+
+    <color name="red_50">#feebee</color>
+    <color name="red_100">#feced2</color>
+    <color name="red_200">#ed9b9a</color>
+    <color name="red_300">#e27573</color>
+    <color name="red_400">#ec5751</color>
+    <color name="red_500">#f04837</color>
+    <color name="red_600">#e13f36</color>
+    <color name="red_700">#cf3630</color>
+    <color name="red_800">#c22f29</color>
+    <color name="red_900">#b3251e</color>
+
+    <color name="neutral_50">#e3eaf5</color>
+    <color name="neutral_100">#bfccda</color>
+    <color name="neutral_200">#9aaabb</color>
+    <color name="neutral_300">#75899e</color>
+    <color name="neutral_400">#5b7289</color>
+    <color name="neutral_500">#415b74</color>
+    <color name="neutral_600">#354e65</color>
+    <color name="neutral_700">#273c50</color>
+    <color name="neutral_800">#192b3b</color>
+    <color name="neutral_900">#021219</color>
+
+    <color name="black">#000000</color>
+    <color name="black_87">#DE000000</color>
+    <color name="black_70">#B3000000</color>
+    <color name="black_54">#8A000000</color>
+    <color name="black_50">#80000000</color>
+    <color name="black_38">#61000000</color>
+    <color name="black_12">#12000000</color>
+
+    <color name="white">#FFFFFF</color>
+    <color name="white_87">#DEFFFFFF</color>
+    <color name="white_70">#B3FFFFFF</color>
+    <color name="white_54">#8AFFFFFF</color>
+    <color name="white_50">#80FFFFFF</color>
+    <color name="white_38">#61FFFFFF</color>
+    <color name="white_12">#12FFFFFF</color>
+</resources>
