@@ -5,6 +5,14 @@ pluginManagement {
         mavenCentral()
     }
 }
+
+buildscript {
+    repositories {
+        google()
+        mavenCentral()
+    }
+}
+
 dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories {
@@ -14,5 +22,7 @@ dependencyResolutionManagement {
 }
 rootProject.name = "Shelfe"
 include ':app'
-include ':app:domain'
-include ':app:data'
+include ':domain'
+include ':data'
+include ':networking'
+include ':commom'

@@ -1,7 +1,7 @@
 package com.androidvip.shelfe
 
 import android.app.Application
-import dagger.hilt.android.AndroidEntryPoint
+import dagger.hilt.android.HiltAndroidApp
 
-@AndroidEntryPoint
+@HiltAndroidApp
 class ShelfeApp : Application()

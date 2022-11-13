@@ -5,8 +5,6 @@ plugins {
     id 'dagger.hilt.android.plugin'
 }
 
-
-
 android {
     compileSdk 33
 
@@ -51,9 +49,12 @@ android {
             }
         }
     }
+    namespace 'com.androidvip.shelfe'
 }
 
 dependencies {
+    implementation(project(":domain"))
+    implementation(project(":data"))
 
     implementation 'androidx.core:core-ktx:1.9.0'
     implementation 'androidx.appcompat:appcompat:1.5.1'
@@ -63,7 +64,9 @@ dependencies {
     implementation 'androidx.navigation:navigation-ui-ktx:2.5.2'
     implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.5.1'
     implementation "com.google.dagger:hilt-android:2.38.1"
-    
+
+    implementation 'com.google.code.gson:gson:2.9.1'
+
     kapt "com.google.dagger:hilt-compiler:2.38.1"
 
     testImplementation 'junit:junit:4.13.2'
