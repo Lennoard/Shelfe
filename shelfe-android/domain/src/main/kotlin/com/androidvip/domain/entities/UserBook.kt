@@ -15,6 +15,6 @@ class UserBook(
     var statusRank: Int = 0
 ) : Book(id) {
     companion object {
-        fun fromBook(book: Book) = Book(book.id)
+        fun fromBook(book: Book) = UserBook(book.id)
     }
 }

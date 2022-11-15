@@ -1,10 +1,10 @@
 package com.androidvip.domain.datasources
 
-import com.androidvip.domain.entities.Book
+import com.androidvip.domain.entities.UserBook
 
 interface BookDataSource {
-    suspend fun getBooks(query: String?): List<Book>
-    suspend fun getBook(id: String): Book?
-    suspend fun setBook(book: Book)
-    suspend fun deleteUserBook(book: Book)
+    suspend fun getBooks(query: String?): List<UserBook>
+    suspend fun getBook(id: String): UserBook?
+    suspend fun setBook(book: UserBook)
+    suspend fun deleteUserBook(book: UserBook)
 }
