@@ -4,17 +4,17 @@ import java.util.Date
 
 open class Book(
     open val id: String,
-    val title: String = "",
-    val publisher: String = "",
-    val publishedAt: Date = Date(),
-    val description: String = "",
-    val isbn: String? = "",
-    val pageCount: Int = 0,
-    val averageRating: Float = 0F,
-    val ratingCount: Int = 0,
-    val language: String = "en",
-    val infoLink: String = "",
-    val authors: List<String> = emptyList(),
-    val imageUrls: List<String> = emptyList(),
-    val categories: List<String> = emptyList()
+    var title: String = "",
+    var publisher: String = "",
+    var publishedAt: Date = Date(),
+    var description: String = "",
+    var isbn: String? = "",
+    var pageCount: Int = 0,
+    var averageRating: Float = 0F,
+    var ratingCount: Int = 0,
+    var language: String = "en",
+    var infoLink: String = "",
+    var authors: List<String> = emptyList(),
+    var imageUrls: List<String> = emptyList(),
+    var categories: List<String> = emptyList()
 )

@@ -6,14 +6,15 @@ import com.androidvip.domain.BookSource
 import com.androidvip.domain.datasources.BookDataSource
 import com.androidvip.domain.datasources.VolumeDataSource
 import com.androidvip.domain.entities.Book
+import com.androidvip.domain.entities.UserBook
 import com.androidvip.domain.errors.BookNotFoundException
 import com.androidvip.domain.errors.TransactionError
 import com.androidvip.domain.repositories.BooksRepository
+import java.io.IOException
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import retrofit2.HttpException
-import java.io.IOException
 
 class BooksRepositoryImpl(
     private val volumeDataSource: VolumeDataSource,
@@ -41,10 +42,14 @@ class BooksRepositoryImpl(
     override suspend fun getBook(
         id: String,
         source: BookSource
-    ): ResultWrapper<Book?, TransactionError> = withContext(dispatcher) {
+    ): ResultWrapper<UserBook?, TransactionError> = withContext(dispatcher) {
         runCatching {
             when (source) {
-                BookSource.GOOGLE_BOOKS -> search(id).getOrDefault(emptyList()).firstOrNull()
+                BookSource.GOOGLE_BOOKS -> {
+                    val book = search(id).getOrDefault(emptyList()).firstOrNull()
+                        ?: throw BookNotFoundException()
+                    UserBook.fromBook(book)
+                }
                 BookSource.LOCAL -> localBookDataSource.getBook(id)
                 BookSource.REMOTE -> remoteBookDataSource.getBook(id)
             }.let { data ->
@@ -56,7 +61,7 @@ class BooksRepositoryImpl(
     }
 
     override suspend fun setBook(
-        book: Book
+        book: UserBook
     ): ResultWrapper<Unit, TransactionError> = withContext(dispatcher) {
         runCatching {
             localBookDataSource.setBook(book).also { remoteBookDataSource.setBook(book) }
@@ -67,7 +72,7 @@ class BooksRepositoryImpl(
     }
 
     override suspend fun deleteUserBook(
-        book: Book
+        book: UserBook
     ): ResultWrapper<Unit, TransactionError> = withContext(dispatcher) {
         runCatching {
             localBookDataSource.deleteUserBook(book).also {

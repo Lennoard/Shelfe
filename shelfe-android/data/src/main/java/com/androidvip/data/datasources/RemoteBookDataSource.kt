@@ -2,7 +2,7 @@ package com.androidvip.data.datasources
 
 import com.androidvip.domain.PathDependable
 import com.androidvip.domain.datasources.BookDataSource
-import com.androidvip.domain.entities.Book
+import com.androidvip.domain.entities.UserBook
 import com.androidvip.domain.errors.UserNotSignedInException
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
@@ -18,27 +18,27 @@ class RemoteBookDataSource(
 ) : BookDataSource, PathDependable {
     private var rootPath = ""
 
-    override suspend fun getBooks(query: String?): List<Book> = checkPathWithContext {
+    override suspend fun getBooks(query: String?): List<UserBook> = checkPathWithContext {
         booksCollection
             .get()
             .await()
-            .toObjects(Book::class.java)
+            .toObjects(UserBook::class.java)
     }
 
-    override suspend fun getBook(id: String): Book? = checkPathWithContext {
+    override suspend fun getBook(id: String): UserBook? = checkPathWithContext {
         booksCollection
             .document(id)
             .get()
             .await()
-            .toObject(Book::class.java)
+            .toObject(UserBook::class.java)
     }
 
-    override suspend fun setBook(book: Book) = checkPathWithContext {
+    override suspend fun setBook(book: UserBook) = checkPathWithContext {
         booksCollection.document(book.id).set(book).await()
         Unit
     }
 
-    override suspend fun deleteUserBook(book: Book) = checkPathWithContext {
+    override suspend fun deleteUserBook(book: UserBook) = checkPathWithContext {
         booksCollection.document(book.id).delete().await()
         Unit
     }

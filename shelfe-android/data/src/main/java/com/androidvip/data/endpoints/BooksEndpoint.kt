@@ -10,6 +10,6 @@ interface BooksEndpoint {
     suspend fun searchVolumes(
         @Query("q") query: String,
         @Query("startIndex") startIndex: Int = 0,
-        @Query("maxResults") maxResults: Int = 1
+        @Query("maxResults") maxResults: Int = 40
     ): VolumesDTO
 }
