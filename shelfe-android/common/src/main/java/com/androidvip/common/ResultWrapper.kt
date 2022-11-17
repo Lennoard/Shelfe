@@ -1,7 +1,7 @@
-package com.androidvip.commom
+package com.androidvip.common
 
-import com.androidvip.commom.ResultWrapper.Error
-import com.androidvip.commom.ResultWrapper.Success
+import com.androidvip.common.ResultWrapper.Error
+import com.androidvip.common.ResultWrapper.Success
 
 sealed class ResultWrapper<out Result, out Error> {
     data class Success<out T>(val data: T) : ResultWrapper<T, Nothing>()
@@ -21,7 +21,12 @@ inline fun <E> ResultWrapper<*, E>.onError(block: (E) -> Unit): ResultWrapper<*,
     return this
 }
 
-fun <T> ResultWrapper<T, *>.getOrDefault(defaultValue: T): T {
+fun <T> ResultWrapper<T, *>.getOrNull(): T? {
     if (succeeded) return (this as Success).data
-    return defaultValue
+    return null
 }
+
+fun <T> ResultWrapper<T, *>.getOrDefault(defaultValue: T): T {
+    return this.getOrNull() ?: defaultValue
+}
+

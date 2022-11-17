@@ -1,6 +1,6 @@
 package com.androidvip.domain.repositories
 
-import com.androidvip.commom.ResultWrapper
+import com.androidvip.common.ResultWrapper
 import com.androidvip.domain.BookSource
 import com.androidvip.domain.entities.Book
 import com.androidvip.domain.entities.UserBook

@@ -56,7 +56,7 @@ class RemoteBookDataSource(
         block()
     }
 
-    private val booksCollection: CollectionReference
+    internal val booksCollection: CollectionReference
         get() {
             return db.collection(USERS_COLLECTION)
                 .document(rootPath)
