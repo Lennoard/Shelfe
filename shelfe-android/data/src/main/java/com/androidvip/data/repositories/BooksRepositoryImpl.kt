@@ -1,7 +1,7 @@
 package com.androidvip.data.repositories
 
-import com.androidvip.commom.ResultWrapper
-import com.androidvip.commom.getOrDefault
+import com.androidvip.common.ResultWrapper
+import com.androidvip.common.getOrDefault
 import com.androidvip.domain.BookSource
 import com.androidvip.domain.datasources.BookDataSource
 import com.androidvip.domain.datasources.VolumeDataSource
@@ -28,7 +28,7 @@ class BooksRepositoryImpl(
     ): ResultWrapper<List<Book>, TransactionError> = withContext(dispatcher) {
         runCatching {
             when (source) {
-                BookSource.GOOGLE_BOOKS -> search("").getOrDefault(emptyList())
+                BookSource.GOOGLE_BOOKS -> search(query.orEmpty()).getOrDefault(emptyList())
                 BookSource.LOCAL -> localBookDataSource.getBooks(query)
                 BookSource.REMOTE -> remoteBookDataSource.getBooks(query)
             }.let { data ->
