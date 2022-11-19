@@ -1,23 +1,17 @@
 package com.androidvip.shelfe
 
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowCompat
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
-import com.androidvip.data.RetrofitClient
 import com.androidvip.shelfe.databinding.ActivityMainBinding
 import com.google.android.material.snackbar.Snackbar
-import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.launch
 
-@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
@@ -40,16 +34,6 @@ class MainActivity : AppCompatActivity() {
             Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                 .setAnchorView(R.id.fab)
                 .setAction("Action", null).show()
-        }
-
-        lifecycleScope.launch {
-            val retrofit = RetrofitClient.getInstance()
-            val volumes = retrofit.myApi.searchVolumes("harry")
-
-            volumes.items.forEach {
-                Log.e("retrofit", it.get("kind").asString)
-            }
-            println(volumes)
         }
     }
 
