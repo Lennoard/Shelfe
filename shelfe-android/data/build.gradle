@@ -19,7 +19,8 @@ android {
                 arguments += [
                         "room.schemaLocation"  : "$projectDir/schemas".toString(),
                         "room.incremental"     : "true",
-                        "room.expandProjection": "true"]
+                        "room.expandProjection": "true"
+                ]
             }
         }
     }
@@ -30,6 +31,12 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+
+    sourceSets {
+        main.java.srcDirs += 'src/main/kotlin'
+        test.java.srcDirs += 'src/test/kotlin'
+    }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
@@ -46,16 +53,14 @@ dependencies {
 
     implementation platform('com.google.firebase:firebase-bom:31.0.2')
 
-    implementation 'com.google.firebase:firebase-firestore-ktx'
     implementation "androidx.room:room-runtime:2.4.3"
+    implementation 'com.google.firebase:firebase-firestore-ktx'
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'
-    implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
-    implementation 'com.squareup.okhttp3:okhttp:4.10.0'
-    implementation 'com.squareup.okhttp3:logging-interceptor:4.8.0'
+
+    implementation "io.insert-koin:koin-android:3.3.0"
 
     annotationProcessor "androidx.room:room-compiler:2.4.3"
 
-    testImplementation project(path: ':common')
     testImplementation 'junit:junit:4.13.2'
     testImplementation "io.mockk:mockk:1.10.6"
     testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:1.4.2"

@@ -1,28 +1,14 @@
-pluginManagement {
-    repositories {
-        gradlePluginPortal()
-        google()
-        mavenCentral()
-    }
-}
-
-buildscript {
-    repositories {
-        google()
-        mavenCentral()
-    }
-}
-
 dependencyResolutionManagement {
-    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories {
         google()
         mavenCentral()
     }
 }
+
 rootProject.name = "Shelfe"
 include ':app'
 include ':domain'
+include ':domain:di'
 include ':data'
 include ':networking'
 include ':common'
