@@ -1,12 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/homeFragment">
-
+    app:startDestination="@id/navigationHome">
 
     <fragment
-        android:id="@+id/homeFragment"
+        android:id="@+id/navigationHome"
         android:name="com.androidvip.shelfe.ui.home.HomeFragment"
-        android:label="@string/home" />
+        android:label="@string/home"
+        tools:layout="@layout/fragment_home" />
+
+    <fragment
+        android:id="@+id/navigationSearch"
+        android:name="com.androidvip.shelfe.ui.search.SearchFragment"
+        android:label="@string/search"
+        tools:layout="@layout/fragment_search"/>
 </navigation>

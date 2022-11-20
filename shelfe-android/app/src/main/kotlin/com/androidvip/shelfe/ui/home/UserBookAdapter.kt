@@ -2,17 +2,17 @@ package com.androidvip.shelfe.ui.home
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import com.androidvip.shelfe.databinding.ListItemUserBookBinding
 import com.androidvip.shelfe.domain.entities.UserBook
 import com.androidvip.shelfe.ui.base.BaseViewHolder
+import com.androidvip.shelfe.utils.UserBookDiffCallback
 
 class UserBookAdapter(
     private val viewModel: HomeViewModel
-) : ListAdapter<UserBook, BaseViewHolder<*>>(ParamDiffCallback()) {
+) : ListAdapter<UserBook, BaseViewHolder<*>>(UserBookDiffCallback) {
 
-    inner class ParamBrowserViewHolder(
+    inner class UserBookViewHolder(
         private val binding: ListItemUserBookBinding
     ) : BaseViewHolder<UserBook>(binding) {
         override fun bind(item: UserBook, position: Int) {
@@ -23,29 +23,19 @@ class UserBookAdapter(
         }
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ParamBrowserViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): UserBookViewHolder {
         val inflater = LayoutInflater.from(parent.context)
         val binding = ListItemUserBookBinding.inflate(inflater, parent, false)
-        return ParamBrowserViewHolder(binding)
+        return UserBookViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: BaseViewHolder<*>, position: Int) {
-        if (holder is ParamBrowserViewHolder) {
+        if (holder is UserBookViewHolder) {
             holder.bind(getItem(position), position)
         }
     }
 
     fun updateData(newList: List<UserBook>) {
         submitList(newList)
-    }
-}
-
-class ParamDiffCallback : DiffUtil.ItemCallback<UserBook>() {
-    override fun areItemsTheSame(oldItem: UserBook, newItem: UserBook): Boolean {
-        return oldItem.id == newItem.id
-    }
-
-    override fun areContentsTheSame(oldItem: UserBook, newItem: UserBook): Boolean {
-        return oldItem == newItem
     }
 }

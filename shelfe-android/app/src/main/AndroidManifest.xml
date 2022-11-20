@@ -19,7 +19,8 @@
         <activity
             android:name=".MainActivity"
             android:exported="true"
-            android:theme="@style/Theme.Shelfe">
+            android:theme="@style/Theme.Shelfe"
+            android:windowSoftInputMode="adjustNothing">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -28,6 +29,7 @@
         </activity>
 
         <activity android:name=".ui.auth.EmailAuthActivity" />
+        <activity android:name=".ui.auth.RegisterActivity" />
         <activity android:name=".ui.details.BookDetailsActivity" />
     </application>
 

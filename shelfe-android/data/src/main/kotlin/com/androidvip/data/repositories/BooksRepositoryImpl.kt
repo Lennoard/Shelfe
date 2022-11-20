@@ -97,6 +97,7 @@ class BooksRepositoryImpl(
             val books = volumeDataSource.search(query, startIndex, maxResults)
             ResultWrapper.Success(books)
         }.getOrElse { error ->
+            throw error
             handleError(error)
         }
     }

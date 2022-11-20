@@ -28,4 +28,9 @@
     <string name="password">Password</string>
     <string name="sign_in">Sign in</string>
     <string name="remove_book_warning">Are you sure you want to remove this book?</string>
+    <string name="empty_state_search">No result found for this search terms</string>
+    <string name="back">Back</string>
+    <string name="sign_up">Sign up</string>
+    <string name="confirm_password">Confirm password</string>
+    <string name="passowords_dont_match">Passwords don\'t match</string>
 </resources>

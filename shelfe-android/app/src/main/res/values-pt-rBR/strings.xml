@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Shelfe</string>
+    <string name="action_settings">Configurações</string>
+    <string name="home">início</string>
+    <string name="search">Pesquisa</string>
+    <string name="settings">Configurações</string>
+    <string name="exit">Sair</string>
+    <string name="book_not_found">Livro não encontrado</string>
+    <string name="database_error">Erro no banco de dados</string>
+    <string name="network_error">Falha ao conectar, verifique a conexão</string>
+    <string name="please_sign_in">Por favor, faça login para ver este conteúdo</string>
+    <string name="details">Detalhes</string>
+    <string name="progress">Progresso</string>
+    <string name="add">Adicionar</string>
+    <string name="edit">Editar</string>
+    <string name="remove">Remover</string>
+    <string name="last_status">Último status</string>
+    <string name="score">Nota</string>
+    <string name="delete">Deletar</string>
+    <string name="favorite">Favorito</string>
+    <string name="share">Compartilhar</string>
+    <string name="description">Descrição</string>
+    <string name="publication_date">Data de publicação</string>
+    <string name="publisher">Editora</string>
+    <string name="page_count">Número de páginas</string>
+    <string name="language">Idioma</string>
+    <string name="email">E-mail</string>
+    <string name="password">Senha</string>
+    <string name="sign_in">Entrar</string>
+    <string name="remove_book_warning">Tem certeza de que deseja deletar este livro?</string>
+    <string name="empty_state_search">Nenhum resultado encontrado para os termos fornecidos</string>
+    <string name="back">Voltar</string>
+</resources>

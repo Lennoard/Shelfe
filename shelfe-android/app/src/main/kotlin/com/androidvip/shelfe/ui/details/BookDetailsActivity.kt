@@ -40,11 +40,11 @@ import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.chip.Chip
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import kotlinx.coroutines.launch
+import org.koin.android.ext.android.inject
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
-import kotlinx.coroutines.launch
-import org.koin.android.ext.android.inject
 
 class BookDetailsActivity : BaseActivity<ActivityBookDetailsBinding>(
     ActivityBookDetailsBinding::inflate

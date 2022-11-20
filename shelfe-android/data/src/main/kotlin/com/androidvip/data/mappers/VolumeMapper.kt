@@ -2,38 +2,41 @@ package com.androidvip.data.mappers
 
 import com.androidvip.data.models.VolumesDTO
 import com.androidvip.shelfe.domain.entities.Book
+import org.json.JSONObject
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
-import org.json.JSONObject
 
 // TODO: base mapper with testable function to parse dates and create string lists
 class VolumeMapper {
     fun map(from: VolumesDTO): List<Book> {
-        return from.items.map {
-            val volume = it.getJSONObject("volume")
+        if (from.totalItems == 0) return emptyList()
+
+        return from.items?.mapNotNull {
+            val volume = it.volumeInfo ?: return@mapNotNull null
 
             Book(
-                id = it.optString("id"),
-                title = "${volume.optString("title")} ${volume.optString("subtitle")}",
-                publisher = volume.optString("publisher"),
-                publishedAt = parseDate(volume.optString("publishedDate")),
-                description = volume.optString("description"),
+                id = it.id,
+                title = "${volume.title} ${volume.subtitle}",
+                publisher = volume.publisher,
+                publishedAt = parseDate(volume.publishedDate),
+                description = volume.description,
                 isbn = runCatching {
-                    volume.optJSONArray("industryIdentifiers")
-                        ?.getJSONObject(0)
-                        ?.optString("identifier")
+                    volume.industryIdentifiers?.first()?.identifier
                 }.getOrNull(),
-                pageCount = volume.optInt("pageCount"),
-                averageRating = volume.optDouble("averageRating", 0.0).toFloat(),
-                ratingCount = volume.optInt("ratingsCount", 0),
-                language = volume.optString("language"),
-                infoLink = volume.optString("infoLink"),
-                authors = volume.getStringList("authors"),
-                imageUrls = volume.getStringList("imageLinks"),
-                categories = volume.getStringList("categories")
+                pageCount = volume.pageCount,
+                averageRating = volume.averageRating,
+                ratingCount = volume.ratingsCount,
+                language = volume.language,
+                infoLink = volume.infoLink.orEmpty(),
+                authors = volume.authors,
+                imageUrls = listOfNotNull(
+                    volume.imageLinks?.smallThumbnail,
+                    volume.imageLinks?.thumbnail
+                ),
+                categories = volume.categories
             )
-        }
+        }.orEmpty()
     }
 
     private fun JSONObject.getStringList(propName: String): List<String> {
