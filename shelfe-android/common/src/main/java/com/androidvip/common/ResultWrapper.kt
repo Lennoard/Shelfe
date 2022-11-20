@@ -12,7 +12,7 @@ val ResultWrapper<*, *>.succeeded
     get() = this is Success && data != null
 
 inline fun <T> ResultWrapper<T, *>.onSuccess(block: (T) -> Unit): ResultWrapper<T, *> {
-    if (!succeeded) block((this as Success).data)
+    if (succeeded) block((this as Success).data)
     return this
 }
 

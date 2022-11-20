@@ -1,9 +1,9 @@
 package com.androidvip.data.utils
 
 import androidx.room.TypeConverter
+import com.androidvip.shelfe.domain.entities.Note
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import java.util.Date
 
 class Converters {
     @TypeConverter
@@ -16,10 +16,16 @@ class Converters {
     }
 
     @TypeConverter
-    fun fromTimestamp(value: Long?): Date? = runCatching {
-        Date(value!!)
-    }.getOrNull()
+    fun fromNote(value: List<Note?>?): String? {
+        val type = object : TypeToken<List<Note>>() {}.type
+        return kotlin.runCatching {
+            Gson().toJson(value, type)
+        }.getOrDefault("[]")
+    }
 
     @TypeConverter
-    fun dateToTimestamp(date: Date?): Long? = date?.time
+    fun toNote(value: String): List<Note>? {
+        val type = object : TypeToken<List<Note>>() {}.type
+        return Gson().fromJson<List<Note>>(value, type)
+    }
 }

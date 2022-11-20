@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    namespace 'com.androidvip.domain.di'
+    namespace 'com.androidvip.shelfe.domain.di'
     compileSdk 33
 
     defaultConfig {
@@ -37,5 +37,6 @@ android {
 }
 
 dependencies {
+    implementation project(path: ':domain')
     implementation "io.insert-koin:koin-android:3.3.0"
 }

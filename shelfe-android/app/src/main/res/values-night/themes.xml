@@ -26,6 +26,9 @@
         <item name="colorOnBackground">@color/neutral_50</item>
         <item name="colorSurface">@color/cyan_1000</item>
         <item name="colorOnSurface">@color/neutral_50</item>
+
+        <item name="appBarLayoutStyle">@style/AppTheme.AppBarLayout</item>
+        <item name="bottomSheetDialogTheme">@style/ThemeOverlay.Shelfe.BottomSheet.Dialog</item>
     </style>
 
     <style name="Theme.Shelfe" parent="Base.Theme.Shelfe" />

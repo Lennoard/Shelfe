@@ -2,8 +2,8 @@ package com.androidvip.data.datasources
 
 import com.androidvip.common.DataFactory
 import com.androidvip.data.utils.BookStubs
-import com.androidvip.domain.entities.UserBook
-import com.androidvip.domain.errors.UserNotSignedInException
+import com.androidvip.shelfe.domain.entities.UserBook
+import com.androidvip.shelfe.domain.errors.UserNotSignedInException
 import com.google.firebase.firestore.FirebaseFirestore
 import io.mockk.coEvery
 import io.mockk.mockk

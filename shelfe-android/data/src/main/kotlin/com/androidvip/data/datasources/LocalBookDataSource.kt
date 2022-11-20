@@ -3,8 +3,8 @@ package com.androidvip.data.datasources
 import com.androidvip.data.access.UserBookDAO
 import com.androidvip.data.database.UserBookDatabase
 import com.androidvip.data.mappers.UserBookMapper
-import com.androidvip.domain.datasources.BookDataSource
-import com.androidvip.domain.entities.UserBook
+import com.androidvip.shelfe.domain.datasources.BookDataSource
+import com.androidvip.shelfe.domain.entities.UserBook
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
