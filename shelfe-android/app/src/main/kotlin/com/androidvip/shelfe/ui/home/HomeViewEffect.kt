@@ -9,7 +9,7 @@ sealed interface HomeViewEffect {
     class ShowError(@StringRes val stringRes: Int) : HomeViewEffect
     class ShowErrorString(val error: String) : HomeViewEffect
     class NavigateToDetails(
-        val userBook: UserBook,
+        val book: UserBook,
         val sharedElements: Array<PairUtil<View, String>>
     ) : HomeViewEffect
 }

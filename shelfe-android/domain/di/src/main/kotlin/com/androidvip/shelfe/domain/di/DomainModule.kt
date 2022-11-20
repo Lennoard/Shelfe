@@ -2,6 +2,8 @@ package com.androidvip.shelfe.domain.di
 
 import com.androidvip.shelfe.domain.usecases.GetUserBooksUseCase
 import com.androidvip.shelfe.domain.usecases.GetUserBooksUseCaseImpl
+import com.androidvip.shelfe.domain.usecases.SearchBooksUseCase
+import com.androidvip.shelfe.domain.usecases.SearchBooksUseCaseImpl
 import com.androidvip.shelfe.domain.usecases.SetUserBookUseCase
 import com.androidvip.shelfe.domain.usecases.SetUserBookUseCaseImpl
 import org.koin.dsl.module
@@ -14,5 +16,9 @@ val domainModule = module {
 
     factory<SetUserBookUseCase> {
         SetUserBookUseCaseImpl(get())
+    }
+
+    factory<SearchBooksUseCase> {
+        SearchBooksUseCaseImpl(get())
     }
 }

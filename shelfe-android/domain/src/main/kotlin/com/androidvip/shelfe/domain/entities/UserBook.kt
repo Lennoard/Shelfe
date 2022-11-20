@@ -17,6 +17,20 @@ data class UserBook(
     var statusRank: Int = 0
 ) : Book(id), Serializable {
     companion object {
-        fun fromBook(book: Book) = UserBook(book.id)
+        fun fromBook(book: Book) = UserBook(book.id).apply {
+            title = book.title
+            publisher = book.publisher
+            publishedAt = book.publishedAt
+            description = book.description
+            isbn = book.isbn
+            pageCount = book.pageCount
+            averageRating = book.averageRating
+            ratingCount = book.ratingCount
+            language = book.language
+            infoLink = book.infoLink
+            authors = book.authors
+            imageUrls = book.imageUrls
+            categories = book.categories
+        }
     }
 }
