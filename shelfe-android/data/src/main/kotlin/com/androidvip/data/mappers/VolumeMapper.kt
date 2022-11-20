@@ -1,7 +1,7 @@
 package com.androidvip.data.mappers
 
 import com.androidvip.data.models.VolumesDTO
-import com.androidvip.domain.entities.Book
+import com.androidvip.shelfe.domain.entities.Book
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -50,6 +50,7 @@ class VolumeMapper {
 
     private fun parseDate(dateString: String): Date {
         val parser = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+        parser.toLocalizedPattern()
         return runCatching {
             parser.parse(dateString)
         }.getOrDefault(Date())

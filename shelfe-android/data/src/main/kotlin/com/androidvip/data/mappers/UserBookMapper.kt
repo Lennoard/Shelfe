@@ -2,8 +2,8 @@ package com.androidvip.data.mappers
 
 import com.androidvip.data.models.BookDTO
 import com.androidvip.data.models.UserBookDTO
-import com.androidvip.domain.BookStatus
-import com.androidvip.domain.entities.UserBook
+import com.androidvip.shelfe.domain.BookStatus
+import com.androidvip.shelfe.domain.entities.UserBook
 import java.util.Date
 
 class UserBookMapper {
@@ -11,7 +11,8 @@ class UserBookMapper {
         id = from.id,
         userRating = from.userRating,
         progress = from.progress ?: 0F,
-        status = BookStatus[from.status],
+        statusEnum = BookStatus[from.status],
+        status = from.status,
         lastStatus = runCatching { Date(from.lastStatus ?: 0L) }.getOrDefault(Date()),
         favorite = from.favorite,
         lastModified = runCatching { Date(from.lastModified ?: 0L) }.getOrDefault(Date()),
@@ -54,7 +55,7 @@ class UserBookMapper {
         return UserBookDTO.fromBook(book).apply {
             userRating = from.userRating
             progress = from.progress
-            status = from.status.value
+            status = from.status
             lastStatus = from.lastStatus.time
             favorite = from.favorite
             lastModified = from.lastModified.time

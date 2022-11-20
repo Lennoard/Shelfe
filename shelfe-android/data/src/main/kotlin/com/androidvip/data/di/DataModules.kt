@@ -8,12 +8,14 @@ import com.androidvip.data.endpoints.BooksEndpoint
 import com.androidvip.data.mappers.UserBookMapper
 import com.androidvip.data.mappers.VolumeMapper
 import com.androidvip.data.repositories.BooksRepositoryImpl
-import com.androidvip.domain.BookSource
-import com.androidvip.domain.datasources.BookDataSource
-import com.androidvip.domain.datasources.VolumeDataSource
-import com.androidvip.domain.repositories.BooksRepository
 import com.androidvip.networking.di.SERVICE_BOOKS_API
 import com.androidvip.networking.di.provideEndpoint
+import com.androidvip.shelfe.domain.BookSource
+import com.androidvip.shelfe.domain.datasources.BookDataSource
+import com.androidvip.shelfe.domain.datasources.VolumeDataSource
+import com.androidvip.shelfe.domain.repositories.BooksRepository
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
@@ -29,6 +31,7 @@ val dataModule = module {
     }
 
     // Data sources
+    factory { Firebase.firestore }
     factory<BookDataSource>(named(BookSource.LOCAL)) {
         LocalBookDataSource(UserBookDatabaseManager.getInstance(androidContext()), get())
     }

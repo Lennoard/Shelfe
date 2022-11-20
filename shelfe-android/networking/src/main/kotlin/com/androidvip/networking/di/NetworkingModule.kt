@@ -2,7 +2,6 @@ package com.androidvip.networking.di
 
 import com.androidvip.networking.ServiceEnum
 import com.google.gson.GsonBuilder
-import java.util.concurrent.TimeUnit
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.koin.core.qualifier.named
@@ -10,13 +9,15 @@ import org.koin.dsl.module
 import retrofit2.Converter
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.util.concurrent.TimeUnit
 
 val SERVICE_BOOKS_API = named(ServiceEnum.BOOKS_API)
 
 val networkingModule = module {
     factory { GsonBuilder().setLenient().create() }
-    factory { GsonConverterFactory.create(get()) }
+    factory<Converter.Factory> { GsonConverterFactory.create(get()) }
     factory { HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY) }
+    factory { provideHttpClient(get()) }
     factory(SERVICE_BOOKS_API) {
         provideRetrofit(ServiceEnum.BOOKS_API.baseUrl, get(), get())
     }

@@ -35,6 +35,17 @@
     <color name="red_800">#c22f29</color>
     <color name="red_900">#b3251e</color>
 
+    <color name="midnight_blue_50">#e8eaf6</color>
+    <color name="midnight_blue_100">#c5cae9</color>
+    <color name="midnight_blue_200">#9fa8da</color>
+    <color name="midnight_blue_300">#7986cb</color>
+    <color name="midnight_blue_400">#5c6ac0</color>
+    <color name="midnight_blue_500">#3f50b5</color>
+    <color name="midnight_blue_600">#3948ab</color>
+    <color name="midnight_blue_700">#303e9f</color>
+    <color name="midnight_blue_800">#283493</color>
+    <color name="midnight_blue_900">#1a227e</color>
+
     <color name="neutral_50">#e3eaf5</color>
     <color name="neutral_100">#bfccda</color>
     <color name="neutral_200">#9aaabb</color>

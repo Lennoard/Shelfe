@@ -1,9 +1,10 @@
 package com.androidvip.data.datasources
 
-import com.androidvip.domain.PathDependable
-import com.androidvip.domain.datasources.BookDataSource
-import com.androidvip.domain.entities.UserBook
-import com.androidvip.domain.errors.UserNotSignedInException
+import com.androidvip.shelfe.domain.BookStatus
+import com.androidvip.shelfe.domain.PathDependable
+import com.androidvip.shelfe.domain.datasources.BookDataSource
+import com.androidvip.shelfe.domain.entities.UserBook
+import com.androidvip.shelfe.domain.errors.UserNotSignedInException
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.CoroutineDispatcher
@@ -22,7 +23,9 @@ class RemoteBookDataSource(
         booksCollection
             .get()
             .await()
-            .toObjects(UserBook::class.java)
+            .toObjects(UserBook::class.java).onEach {
+                it.statusEnum = BookStatus[it.status]
+            }
     }
 
     override suspend fun getBook(id: String): UserBook? = checkPathWithContext {
@@ -30,7 +33,9 @@ class RemoteBookDataSource(
             .document(id)
             .get()
             .await()
-            .toObject(UserBook::class.java)
+            .toObject(UserBook::class.java)?.apply {
+                statusEnum = BookStatus[status]
+            }
     }
 
     override suspend fun setBook(book: UserBook) = checkPathWithContext {

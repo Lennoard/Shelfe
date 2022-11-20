@@ -2,19 +2,21 @@ package com.androidvip.data.repositories
 
 import com.androidvip.common.ResultWrapper
 import com.androidvip.common.getOrDefault
-import com.androidvip.domain.BookSource
-import com.androidvip.domain.datasources.BookDataSource
-import com.androidvip.domain.datasources.VolumeDataSource
-import com.androidvip.domain.entities.Book
-import com.androidvip.domain.entities.UserBook
-import com.androidvip.domain.errors.BookNotFoundException
-import com.androidvip.domain.errors.TransactionError
-import com.androidvip.domain.repositories.BooksRepository
-import java.io.IOException
+import com.androidvip.shelfe.domain.BookSource
+import com.androidvip.shelfe.domain.PathDependable
+import com.androidvip.shelfe.domain.datasources.BookDataSource
+import com.androidvip.shelfe.domain.datasources.VolumeDataSource
+import com.androidvip.shelfe.domain.entities.Book
+import com.androidvip.shelfe.domain.entities.UserBook
+import com.androidvip.shelfe.domain.errors.BookNotFoundException
+import com.androidvip.shelfe.domain.errors.TransactionError
+import com.androidvip.shelfe.domain.errors.UserNotSignedInException
+import com.androidvip.shelfe.domain.repositories.BooksRepository
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import retrofit2.HttpException
+import java.io.IOException
 
 class BooksRepositoryImpl(
     private val volumeDataSource: VolumeDataSource,
@@ -25,10 +27,12 @@ class BooksRepositoryImpl(
     override suspend fun getBooks(
         query: String?,
         source: BookSource
-    ): ResultWrapper<List<Book>, TransactionError> = withContext(dispatcher) {
+    ): ResultWrapper<List<UserBook>, TransactionError> = withContext(dispatcher) {
         runCatching {
             when (source) {
-                BookSource.GOOGLE_BOOKS -> search(query.orEmpty()).getOrDefault(emptyList())
+                BookSource.GOOGLE_BOOKS -> search(query.orEmpty()).getOrDefault(emptyList()).map {
+                    UserBook.fromBook(it)
+                }
                 BookSource.LOCAL -> localBookDataSource.getBooks(query)
                 BookSource.REMOTE -> remoteBookDataSource.getBooks(query)
             }.let { data ->
@@ -97,10 +101,15 @@ class BooksRepositoryImpl(
         }
     }
 
+    override fun setUserId(userId: String) {
+        (remoteBookDataSource as (PathDependable)).setRootPath(userId)
+    }
+
     private fun handleError(error: Throwable): ResultWrapper.Error<TransactionError> {
         return when (error) {
             is HttpException -> ResultWrapper.Error(TransactionError.NetworkError)
             is IOException -> ResultWrapper.Error(TransactionError.DatabaseError)
+            is UserNotSignedInException -> ResultWrapper.Error(TransactionError.UserNotSingedError)
             is BookNotFoundException -> ResultWrapper.Error(TransactionError.BookNotFoundError)
             else -> ResultWrapper.Error(TransactionError.UnknownError(error.message.orEmpty()))
         }

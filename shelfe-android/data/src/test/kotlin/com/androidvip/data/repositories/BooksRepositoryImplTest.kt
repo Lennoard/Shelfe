@@ -6,9 +6,9 @@ import com.androidvip.common.onError
 import com.androidvip.data.datasources.LocalBookDataSource
 import com.androidvip.data.datasources.RemoteBookDataSource
 import com.androidvip.data.datasources.VolumeDataSourceImpl
-import com.androidvip.domain.BookSource
-import com.androidvip.domain.errors.BookNotFoundException
-import com.androidvip.domain.errors.TransactionError
+import com.androidvip.shelfe.domain.BookSource
+import com.androidvip.shelfe.domain.errors.BookNotFoundException
+import com.androidvip.shelfe.domain.errors.TransactionError
 import io.mockk.called
 import io.mockk.coEvery
 import io.mockk.coVerify

@@ -1,15 +1,15 @@
 package com.androidvip.data.utils
 
 import com.androidvip.common.DataFactory
-import com.androidvip.domain.BookStatus
-import com.androidvip.domain.entities.UserBook
+import com.androidvip.shelfe.domain.BookStatus
+import com.androidvip.shelfe.domain.entities.UserBook
 
 object BookStubs {
     fun randomBook(bookId: String) = UserBook(
         id = bookId,
         userRating = DataFactory.randomFloat(),
         progress = DataFactory.randomFloat(),
-        status = BookStatus.DROPPED,
+        statusEnum = BookStatus.DROPPED,
         lastStatus = DataFactory.randomDate(),
         favorite = DataFactory.randomBoolean(),
         lastModified = DataFactory.randomDate(),

@@ -2,8 +2,8 @@ package com.androidvip.data.datasources
 
 import com.androidvip.data.endpoints.BooksEndpoint
 import com.androidvip.data.mappers.VolumeMapper
-import com.androidvip.domain.datasources.VolumeDataSource
-import com.androidvip.domain.entities.Book
+import com.androidvip.shelfe.domain.datasources.VolumeDataSource
+import com.androidvip.shelfe.domain.entities.Book
 
 class VolumeDataSourceImpl(
     private val endpoint: BooksEndpoint,

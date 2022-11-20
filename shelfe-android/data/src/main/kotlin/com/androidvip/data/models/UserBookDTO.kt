@@ -1,10 +1,11 @@
 package com.androidvip.data.models
 
 import androidx.room.ColumnInfo
+import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.androidvip.domain.BookStatus
-import com.androidvip.domain.entities.Note
+import com.androidvip.shelfe.domain.BookStatus
+import com.androidvip.shelfe.domain.entities.Note
 
 @Entity(tableName = "books")
 class UserBookDTO(
@@ -22,7 +23,7 @@ class UserBookDTO(
 
     var favorite: Boolean = false,
 
-    @ColumnInfo(name = "last_status")
+    @ColumnInfo(name = "last_modified")
     var lastModified: Long? = System.currentTimeMillis(),
 
     var notes: List<Note>? = emptyList()
