@@ -12,4 +12,5 @@ sealed interface HomeViewEffect {
         val book: UserBook,
         val sharedElements: Array<PairUtil<View, String>>
     ) : HomeViewEffect
+    object Idle : HomeViewEffect
 }

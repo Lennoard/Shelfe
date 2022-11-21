@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="book_status">
+        <item>Desistido</item>
+        <item>Lendo</item>
+        <item>Em espera</item>
+        <item>Lido</item>
+        <item>Planejo ler</item>
+    </string-array>
+</resources>

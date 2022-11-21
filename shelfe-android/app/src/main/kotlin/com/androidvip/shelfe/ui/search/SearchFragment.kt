@@ -6,6 +6,7 @@ import android.view.View
 import android.view.WindowManager
 import android.view.inputmethod.EditorInfo
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.core.app.ActivityOptionsCompat
 import androidx.core.util.Pair
 import androidx.core.view.isVisible
@@ -60,6 +61,21 @@ class SearchFragment : BaseViewBindingFragment<FragmentSearchBinding>(
             }
             false
         }
+
+        requireActivity().onBackPressedDispatcher.addCallback(
+            viewLifecycleOwner,
+            object :
+                OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    viewModel.reset()
+                }
+            }
+        )
+    }
+
+    override fun onStop() {
+        super.onStop()
+        viewModel.onStop()
     }
 
     private fun renderState(viewState: SearchViewState) {
@@ -84,6 +100,8 @@ class SearchFragment : BaseViewBindingFragment<FragmentSearchBinding>(
             is HomeViewEffect.ShowErrorString -> {
                 Toast.makeText(requireContext(), viewEffect.error, Toast.LENGTH_LONG).show()
             }
+
+            is HomeViewEffect.Idle -> {}
         }
     }
 
