@@ -89,6 +89,10 @@ class SearchViewModel(private val searchBooksUseCase: SearchBooksUseCase) : View
         }
     }
 
+    fun onStop() {
+        _viewEffect.postValue(HomeViewEffect.Idle)
+    }
+
     private val currentViewState: SearchViewState
         get() = viewState.value ?: SearchViewState()
 }

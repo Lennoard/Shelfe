@@ -71,6 +71,7 @@ class HomeFragment :
             is HomeViewEffect.ShowErrorString -> {
                 Toast.makeText(requireContext(), viewEffect.error, Toast.LENGTH_LONG).show()
             }
+            HomeViewEffect.Idle -> { }
         }
     }
 
