@@ -32,5 +32,10 @@
     <string name="back">Back</string>
     <string name="sign_up">Sign up</string>
     <string name="confirm_password">Confirm password</string>
-    <string name="passowords_dont_match">Passwords don\'t match</string>
+    <string name="passwords_dont_match">Passwords don\'t match</string>
+    <string name="sign_out">Sign out</string>
+    <string name="username">Username</string>
+    <string name="change_password">Change password</string>
+    <string name="delete_account">Delete account</string>
+    <string name="delete_account_warning">Are you sure you want to delete your account? Your data won\'t be preserved.</string>
 </resources>

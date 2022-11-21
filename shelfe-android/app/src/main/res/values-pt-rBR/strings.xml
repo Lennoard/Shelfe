@@ -2,7 +2,7 @@
 <resources>
     <string name="app_name">Shelfe</string>
     <string name="action_settings">Configurações</string>
-    <string name="home">início</string>
+    <string name="home">Início</string>
     <string name="search">Pesquisa</string>
     <string name="settings">Configurações</string>
     <string name="exit">Sair</string>
@@ -31,4 +31,12 @@
     <string name="remove_book_warning">Tem certeza de que deseja deletar este livro?</string>
     <string name="empty_state_search">Nenhum resultado encontrado para os termos fornecidos</string>
     <string name="back">Voltar</string>
+    <string name="sign_up">Cadastrar</string>
+    <string name="confirm_password">Confirmar senha</string>
+    <string name="passwords_dont_match">As senhas não correspondem</string>
+    <string name="sign_out">Sair</string>
+    <string name="username">Nome de usuário</string>
+    <string name="change_password">Alterar senha</string>
+    <string name="delete_account">Deletar conta</string>
+    <string name="delete_account_warning">Tem certeza de que deseja excluir sua conta? Seus dados não serão preservados.</string>
 </resources>

@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="@dimen/d16">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:elevation="0dp"
+            app:cardCornerRadius="@dimen/d16"
+            app:strokeColor="@color/neutral_100"
+            app:strokeWidth="1dp">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:animateLayoutChanges="true">
+
+                <com.google.android.material.imageview.ShapeableImageView
+                    android:id="@+id/userPicture"
+                    android:layout_width="@dimen/d64"
+                    android:layout_height="@dimen/d64"
+                    android:layout_marginStart="@dimen/d16"
+                    android:layout_marginTop="@dimen/d16"
+                    android:scaleType="centerCrop"
+                    app:srcCompat="@drawable/avatar"
+                    app:layout_constraintEnd_toStartOf="@+id/userTitle"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:shapeAppearance="@style/ShapeAppearance.Material3.Corner.Full"
+                    />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/userTitle"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/d24"
+                    android:layout_marginEnd="@dimen/d16"
+                    android:textAppearance="?textAppearanceSubtitle1"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="@+id/userPicture"
+                    app:layout_constraintEnd_toStartOf="@+id/signOut"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toEndOf="@+id/userPicture"
+                    app:layout_constraintTop_toTopOf="@+id/userPicture"
+                    tools:text="@tools:sample/full_names" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/signOut"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/d16"
+                    android:text="@string/sign_out"
+                    app:backgroundTint="?attr/colorAccent"
+                    app:icon="@drawable/ic_exit"
+                    app:iconGravity="end"
+                    app:layout_constraintBottom_toBottomOf="@id/divider1"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/userTitle"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <com.google.android.material.divider.MaterialDivider
+                    android:id="@+id/divider1"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="@dimen/d16"
+                    android:background="@color/neutral_100"
+                    app:layout_constraintTop_toBottomOf="@+id/userPicture" />
+
+                <LinearLayout
+                    android:id="@+id/userNameLayout"
+                    style="@style/Clickable"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:paddingLeft="@dimen/d16"
+                    android:paddingTop="@dimen/d20"
+                    android:paddingRight="@dimen/d16"
+                    android:paddingBottom="@dimen/d20"
+                    app:layout_constraintTop_toBottomOf="@id/divider1">
+
+                    <com.google.android.material.textview.MaterialTextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/username"
+                        android:textAppearance="?textAppearanceSubtitle1" />
+
+                    <com.google.android.material.textview.MaterialTextView
+                        android:id="@+id/username"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:alpha="0.7"
+                        android:text="@string/username"
+                        android:textAppearance="?textAppearanceBody2" />
+
+                </LinearLayout>
+
+                <com.google.android.material.divider.MaterialDivider
+                    android:id="@+id/divider2"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/neutral_100"
+                    app:layout_constraintTop_toBottomOf="@+id/userNameLayout" />
+
+                <LinearLayout
+                    android:id="@+id/emailLayout"
+                    style="@style/Clickable"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:paddingLeft="@dimen/d16"
+                    android:paddingTop="@dimen/d20"
+                    android:paddingRight="@dimen/d16"
+                    android:paddingBottom="@dimen/d20"
+                    app:layout_constraintTop_toBottomOf="@id/divider2">
+
+                    <com.google.android.material.textview.MaterialTextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/email"
+                        android:textAppearance="?textAppearanceSubtitle1" />
+
+                    <com.google.android.material.textview.MaterialTextView
+                        android:id="@+id/email"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:alpha="0.7"
+                        android:text="@string/username"
+                        android:textAppearance="?textAppearanceBody2" />
+
+                </LinearLayout>
+
+                <com.google.android.material.divider.MaterialDivider
+                    android:id="@+id/divider3"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/neutral_100"
+                    app:layout_constraintTop_toBottomOf="@+id/emailLayout" />
+
+                <LinearLayout
+                    android:id="@+id/passwordLayout"
+                    style="@style/Clickable"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:paddingLeft="@dimen/d16"
+                    android:paddingTop="@dimen/d20"
+                    android:paddingRight="@dimen/d16"
+                    android:paddingBottom="@dimen/d20"
+                    app:layout_constraintTop_toBottomOf="@id/divider3">
+
+                    <com.google.android.material.textview.MaterialTextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/change_password"
+                        android:textAppearance="?textAppearanceSubtitle1" />
+
+                    <com.google.android.material.textview.MaterialTextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:alpha="0.7"
+                        android:text="******"
+                        android:textAppearance="?textAppearanceBody2" />
+
+                </LinearLayout>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/deleteAccount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/d24"
+            android:layout_marginBottom="@dimen/d24"
+            android:text="@string/delete_account"
+            android:textColor="@color/red_900"
+            app:backgroundTint="@color/red_50"
+            app:icon="@drawable/ic_delete"
+            app:iconTint="@color/red_900" />
+
+    </LinearLayout>
+
+</androidx.core.widget.NestedScrollView>
