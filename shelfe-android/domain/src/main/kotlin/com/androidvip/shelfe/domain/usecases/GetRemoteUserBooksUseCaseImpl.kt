@@ -6,7 +6,9 @@ import com.androidvip.shelfe.domain.entities.UserBook
 import com.androidvip.shelfe.domain.errors.TransactionError
 import com.androidvip.shelfe.domain.repositories.BooksRepository
 
-class GetUserBooksUseCaseImpl(private val repository: BooksRepository) : GetUserBooksUseCase {
+class GetRemoteUserBooksUseCaseImpl(
+    private val repository: BooksRepository
+) : GetRemoteUserBooksUseCase {
     override suspend operator fun invoke(
         userId: String
     ): ResultWrapper<List<UserBook>, TransactionError> {

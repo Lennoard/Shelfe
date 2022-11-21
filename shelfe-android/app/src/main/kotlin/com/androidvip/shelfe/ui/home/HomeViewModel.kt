@@ -11,7 +11,7 @@ import com.androidvip.shelfe.R
 import com.androidvip.shelfe.domain.BookStatus
 import com.androidvip.shelfe.domain.entities.UserBook
 import com.androidvip.shelfe.domain.errors.TransactionError
-import com.androidvip.shelfe.domain.usecases.GetUserBooksUseCase
+import com.androidvip.shelfe.domain.usecases.GetRemoteUserBooksUseCase
 import com.androidvip.shelfe.ui.details.BookDetailsActivity
 import com.androidvip.shelfe.utils.ViewState
 import com.google.firebase.auth.ktx.auth
@@ -19,7 +19,7 @@ import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.launch
 import androidx.core.util.Pair as PairUtil
 
-class HomeViewModel(private val getUserBooksUseCase: GetUserBooksUseCase) : ViewModel() {
+class HomeViewModel(private val getUserBooksUseCase: GetRemoteUserBooksUseCase) : ViewModel() {
     private val _viewState = MutableLiveData<ViewState<UserBook>>()
     val viewState: LiveData<ViewState<UserBook>> = _viewState
 
