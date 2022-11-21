@@ -15,5 +15,11 @@
         android:id="@+id/navigationSearch"
         android:name="com.androidvip.shelfe.ui.search.SearchFragment"
         android:label="@string/search"
-        tools:layout="@layout/fragment_search"/>
+        tools:layout="@layout/fragment_search" />
+
+    <fragment
+        android:id="@+id/navigationSettings"
+        android:name="com.androidvip.shelfe.ui.settings.SettingsFragment"
+        android:label="@string/settings"
+        tools:layout="@layout/fragment_settings" />
 </navigation>

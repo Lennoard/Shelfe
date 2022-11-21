@@ -48,7 +48,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
 
     private fun setUpNavigation() = with(binding) {
         val navController = navHost.navController
-        val defaultIds = setOf(R.id.navigationHome, R.id.navigationSearch)
+        val defaultIds = setOf(R.id.navigationHome, R.id.navigationSearch, R.id.navigationSettings)
         val appBarConfiguration = AppBarConfiguration(defaultIds)
 
         toolbar.setupWithNavController(navController, appBarConfiguration)

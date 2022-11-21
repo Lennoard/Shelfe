@@ -3,7 +3,6 @@ package com.androidvip.shelfe.ui.auth
 import android.content.Intent
 import android.os.Bundle
 import android.view.inputmethod.EditorInfo
-import android.widget.Toast
 import com.androidvip.shelfe.MainActivity
 import com.androidvip.shelfe.R
 import com.androidvip.shelfe.databinding.ActivityRegisterBinding
@@ -37,7 +36,7 @@ class RegisterActivity : BaseActivity<ActivityRegisterBinding>(
         val passwordConfirm = binding.confirmPasswordField.text.toString()
 
         if (password != passwordConfirm) {
-            Snackbar.make(binding.root, R.string.passowords_dont_match, Snackbar.LENGTH_SHORT)
+            Snackbar.make(binding.root, R.string.passwords_dont_match, Snackbar.LENGTH_SHORT)
                 .show()
             return
         }
