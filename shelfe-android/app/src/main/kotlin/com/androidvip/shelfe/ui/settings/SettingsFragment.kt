@@ -25,11 +25,12 @@ class SettingsFragment : BaseViewBindingFragment<FragmentSettingsBinding>(
         super.onViewCreated(view, savedInstanceState)
 
         val user = auth.currentUser ?: return
+        val username = user.displayName
+            ?: user.email?.split("@")?.firstOrNull().orEmpty()
 
         binding.email.text = user.email
-        binding.username.text = user.displayName
-        binding.userTitle.text = user.displayName
-            ?: user.email?.split("@")?.firstOrNull().orEmpty()
+        binding.username.text = username
+        binding.userTitle.text = username
 
         user.photoUrl?.let { uri ->
             Glide.with(binding.userPicture)
