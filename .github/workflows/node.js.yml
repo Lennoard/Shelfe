@@ -15,7 +15,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: /shelfe-react
+        working-directory: ./shelfe-react
 
     strategy:
       matrix:
