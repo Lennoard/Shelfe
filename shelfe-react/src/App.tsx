@@ -1,5 +1,5 @@
 import './styles/global.css';
-import Routes from "./routes";
+import AppRoutes from "./routes";
 import { createTheme, ThemeProvider } from "@mui/material";
 import initFirebase from './firebase';
 
@@ -24,7 +24,7 @@ function App() {
 
   return (
     <ThemeProvider theme={theme}>
-      <Routes />
+      <AppRoutes />
     </ThemeProvider>
   );
 }

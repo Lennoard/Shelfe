@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import {
   Container,
   Box,
@@ -40,7 +40,7 @@ const modalStyle = {
 };
 
 export default function UserSettings() {
-  const history = useHistory();
+  const navigate = useNavigate();
   const [user, setUser] = useState<User | null>(null);
   const [openDeleteAccountModal, setDeleteAccountModalOpen] = useState(false);
   const [openUsernameModal, setUsernameModalOpen] = useState(false);
@@ -62,13 +62,13 @@ export default function UserSettings() {
   useEffect(() => {
     getAuth().onAuthStateChanged((user) => {
       if (!user) {
-        history.replace("/");
+        navigate("/", { replace: true });
         return;
       }
 
       setUser(user);
     });
-  }, [history]);
+  }, [navigate]);
 
   const UserSettingsCard = () => {
     if (!user) return <div></div>

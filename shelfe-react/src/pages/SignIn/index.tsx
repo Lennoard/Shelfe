@@ -20,7 +20,7 @@ import Grid from "@mui/material/Grid";
 import React, { useEffect, useRef, useState } from "react";
 import GoogleSignInButton from "../../components/GoogleSignInButton";
 import showLocalizedAuthError from "../../utils/auth/AuthErrors";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 import bookLogo from "../../images/pages/signin/book.svg";
 
@@ -54,7 +54,7 @@ interface TabPanelProps {
 }
 
 export default function SignIn() {
-  const history = useHistory();
+  const navigate = useNavigate();
   const [credentials, setCredentials] = useState<IAuthCredential>({
     email: "",
     password: "",
@@ -79,7 +79,7 @@ export default function SignIn() {
 
     if (user) {
       setLoading(false);
-      history.push("/dashboard");
+      navigate("/dashboard");
     }
   };
 
@@ -98,7 +98,7 @@ export default function SignIn() {
         errorMessage: "Conta criada com sucesso",
       });
       setTimeout(() => {
-        history.push("/dashboard");
+        navigate("/dashboard");
       }, 2000);
     }
   };
@@ -142,7 +142,7 @@ export default function SignIn() {
       const { user } = await signInWithPopup(auth, provider);
        if (user) {
          setLoading(false);
-         history.push("/dashboard");
+         navigate("/dashboard");
        }
     } catch (error: any) {
       setToast({

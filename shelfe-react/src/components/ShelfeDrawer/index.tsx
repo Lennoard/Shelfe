@@ -17,7 +17,7 @@ import {
   SearchOutlined,
   SettingsOutlined,
 } from "@mui/icons-material";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { getAuth, User } from "@firebase/auth";
 
@@ -46,7 +46,7 @@ const defaultItems = [
 export default function ShelfeDrawer(props: DrawerProps) {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [user, setUser] = useState<User | null>(null);
-  const history = useHistory();
+  const navigate = useNavigate();
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
   };
@@ -71,7 +71,7 @@ export default function ShelfeDrawer(props: DrawerProps) {
                       : "shelfeListItem"
                   }
                   key={item.title}
-                  onClick={() => history.push(item.route)}
+                  onClick={() => navigate(item.route)}
                 >
                   <ListItemIcon>{item.icon}</ListItemIcon>
                   <ListItemText primary={item.title} />
@@ -88,7 +88,7 @@ export default function ShelfeDrawer(props: DrawerProps) {
                     : "shelfeListItem"
                 }
                 key={item.title}
-                onClick={() => history.push(item.route)}
+                onClick={() => navigate(item.route)}
               >
                 <ListItemIcon>{item.icon}</ListItemIcon>
                 <ListItemText primary={item.title} />

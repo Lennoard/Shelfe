@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useHistory } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import {
   Container,
   Grid,
@@ -29,74 +29,76 @@ const userBookManager = new UserBookManagerImpl(getAuth(), getFirestore());
 const userBookMapper = new UserBookMapper();
 
 export default function Search() {
-  const history = useHistory();
+  const navigate = useNavigate();
   const [searchResults, setSearchResults] = useState<Array<IUserBook>>([]);
   const [totalItems, setTotalItems] = useState(0);
   const [title, setTitle] = useState("Pesquisar");
   const [showEmptyState, setShowEmptyState] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [searching, setSearching] = useState(false);
+  const location = useLocation();
+
+  useEffect(() => {
+    const performSearch = (query: string) => {
+      setSearching(true);
+      api
+        .search(query)
+        .then(([itemsFound, books]) => {
+          userBookManager
+            .getUserBooks()
+            .then((userBooks) => {
+              setSearching(false);
+              setTotalItems(itemsFound);
+
+              let results = books.map((book) => {
+                let userBook = userBooks.find((b) => b.id === book.id);
+                console.warn(userBook);
+                if (userBook) return userBook;
+                return userBookMapper.map(book);
+              });
+
+              setSearchResults(results);
+            })
+            .catch((error) => {
+              setSearching(false);
+              setTotalItems(itemsFound);
+
+              console.warn(error);
+              setSearchResults(books.map((b) => userBookMapper.map(b)));
+            });
+        })
+        .catch((error) => {
+          console.warn(error);
+          setSearching(false);
+          setShowEmptyState(true);
+        });
+    };
+
+    if (!location.search) {
+      setSearchResults([]);
+      setShowEmptyState(false);
+      return;
+    }
+
+    performSearch(
+      decodeURIComponent((location.search as string).replace("?q=", ""))
+    );
+
+    const query = new URLSearchParams(window.location.search).get("q");
+    if (!query) return;
+
+    performSearch(decodeURIComponent(query));
+    setSearchQuery(query);
+  }, [location]);
 
   useEffect(() => {
     getAuth().onAuthStateChanged((user) => {
       if (!user) {
-        history.replace("/");
+        navigate("/", { replace: true });
         return;
       }
-
-      const performSearch = (query: string) => {
-        setSearching(true);
-        api
-          .search(query)
-          .then(([itemsFound, books]) => {
-            userBookManager
-              .getUserBooks()
-              .then(userBooks => {
-                setSearching(false);
-                setTotalItems(itemsFound);
-
-                let results = books.map((book) => {
-                  let userBook = userBooks.find((b) => b.id === book.id);
-                  console.warn(userBook);
-                  if (userBook) return userBook;
-                  return userBookMapper.map(book);
-                });
-
-                setSearchResults(results);
-              }).catch(error => {
-                setSearching(false);
-                setTotalItems(itemsFound);
-
-                console.warn(error);
-                setSearchResults(books.map(b => userBookMapper.map(b)));
-              });
-          })
-          .catch((error) => {
-            console.warn(error);
-            setSearching(false);
-            setShowEmptyState(true);
-          });
-      };
-
-      history.listen((location: any) => {
-        if (!location.search) {
-          setSearchResults([]);
-          setShowEmptyState(false);
-          return;
-        }
-
-        performSearch(
-          decodeURIComponent((location.search as string).replace("?q=", ""))
-        );
-      });
-
-      const query = new URLSearchParams(window.location.search).get("q");
-      if (!query) return;
-
-      performSearch(decodeURIComponent(query));
-      setSearchQuery(query);
     });
-  }, [history]);
+  }, [navigate]);
 
   if (showEmptyState) {
     return (
@@ -144,7 +146,7 @@ export default function Search() {
                 onChange={(event) => setSearchQuery(event.target.value)}
                 onKeyPress={(event) => {
                   if (event.key === "Enter") {
-                    history.push(
+                    navigate(
                       `/search?q=${encodeURIComponent(searchQuery)}`
                     );
                   }
@@ -168,9 +170,12 @@ export default function Search() {
         {searchResults.flatMap((book) => {
           return (
             <Grid item xs={12} sm={6}>
-              <BookCard book={book} onClick={() => {
-                history.push(`/book?id=${book.id}`)
-              }} />
+              <BookCard
+                book={book}
+                onClick={() => {
+                  navigate(`/book?id=${book.id}`);
+                }}
+              />
             </Grid>
           );
         })}

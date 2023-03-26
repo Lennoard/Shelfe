@@ -1,6 +1,6 @@
 import { getAuth } from "@firebase/auth";
 import { getFirestore } from "@firebase/firestore";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import {
   Grid,
   Card,
@@ -37,7 +37,7 @@ const userBookManager = new UserBookManagerImpl(getAuth(), getFirestore());
 export default function Dashboard() {
   const [userBooks, setUserBooks] = useState<Array<IUserBook>>([]);
   const [isDataLoaded, setDataLoaded] = useState(false);
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const [sortButton, setSortButton] = useState<null | HTMLElement>(null);
   const sortButtonOpenBool = Boolean(sortButton);
@@ -57,7 +57,7 @@ export default function Dashboard() {
   useEffect(() => {
     getAuth().onAuthStateChanged((user) => {
       if (!user) {
-        history.replace("/");
+        navigate("/", {replace: true});
         return;
       }
       userBookManager.getUserBooks().then((books) => {
@@ -65,7 +65,7 @@ export default function Dashboard() {
         setDataLoaded(true);
       });
     });
-  }, [history, sortFilters]);
+  }, [navigate, sortFilters]);
   const handleModalOpen = () => setOpenModal(true);
   const handleModalClose = () => setOpenModal(false);
   const handleSortButtonClick = (event: React.MouseEvent<HTMLElement>) => {
@@ -277,7 +277,7 @@ export default function Dashboard() {
                     key={i}
                     book={book}
                     onClick={() => {
-                      history.push(`/book?id=${book.id}`);
+                      navigate(`/book?id=${book.id}`);
                     }}
                   />
                 </Grid>
@@ -313,7 +313,7 @@ export default function Dashboard() {
               size="large"
               style={{ marginTop: 20 }}
               onClick={() => {
-                history.push("/search");
+                navigate("/search");
               }}
             >
               Adicionar livros

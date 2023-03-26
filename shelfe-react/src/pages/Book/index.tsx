@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import {
   Container,
   Grid,
@@ -47,7 +47,7 @@ const api = new BooksApiManager();
 const userBookManager = new UserBookManagerImpl(getAuth(), getFirestore());
 
 export default function Book() {
-  const history = useHistory();
+  const navigate = useNavigate();
   const [showEmptyState, setShowEmptyState] = useState(false);
   const [book, setBook] = useState<IUserBook | null>(null);
   const [openDeleteModal, setDeleteModalOpen] = useState(false);
@@ -96,10 +96,10 @@ export default function Book() {
             queryApi();
           });
       } else {
-        history.replace("/");
+        navigate("/", { replace: true });
       }
     });
-  }, [history]);
+  }, [navigate]);
 
   if (showEmptyState) {
     return (
@@ -113,7 +113,7 @@ export default function Book() {
         >
           <EmptyState />
           <br />
-          <Button variant="contained" onClick={() => history.back()}>
+          <Button variant="contained" onClick={() => navigate(-1)}>
             Voltar
           </Button>
         </div>
