@@ -11,7 +11,7 @@ on:
     
 defaults:
   run:
-    working-directory: ./shelfe-react    
+    working-directory: shelfe-react  
 
 jobs:
   build:
@@ -19,7 +19,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: ./shelfe-react
+        working-directory: shelfe-react
 
     strategy:
       matrix:
@@ -27,7 +27,6 @@ jobs:
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
 
     steps:
-    - run: cd shelfe-react
     - uses: actions/checkout@v3
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v3
